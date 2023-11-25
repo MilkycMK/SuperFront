@@ -1,7 +1,6 @@
 package net.mlk.adolffront.utils;
 
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;

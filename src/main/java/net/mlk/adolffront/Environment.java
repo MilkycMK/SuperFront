@@ -5,7 +5,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class Environment {
     public static final Color BACKGROUND_COLOR = Color.rgb(24, 24, 24, 1.0);

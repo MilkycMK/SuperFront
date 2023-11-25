@@ -18,7 +18,6 @@ public class AdolfFront extends Application {
 
         AdolfFront.stage = stage;
         stage.setTitle("AdolfFront");
-        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
