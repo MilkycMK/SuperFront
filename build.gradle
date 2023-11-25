@@ -7,7 +7,6 @@ plugins {
 }
 
 group 'net.mlk.adolffront'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -26,7 +25,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'net.mlk.adolffront.adolffront'
-    mainClass = 'net.mlk.adolffront.adolffront.HelloApplication'
+    mainClass = 'net.mlk.adolffront.AdolfFront'
 }
 
 javafx {

@@ -3,6 +3,6 @@ module net.mlk.adolffront.adolffront {
     requires javafx.fxml;
 
 
-    opens net.mlk.adolffront.adolffront to javafx.fxml;
-    exports net.mlk.adolffront.adolffront;
+    opens net.mlk.adolffront to javafx.fxml;
+    exports net.mlk.adolffront;
 }
