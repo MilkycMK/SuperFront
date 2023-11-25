@@ -25,11 +25,4 @@ public class Environment {
     public static final int HEIGHT = 600;
     public static final int ROUND = 20;
 
-    public static Font getFont(int size) {
-        return getFont("Inter Bold", size);
-    }
-
-    public static Font getFont(String family, int size) {
-        return Font.font(family, size);
-    }
 }
