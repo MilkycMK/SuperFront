@@ -28,6 +28,13 @@ application {
     mainClass = 'net.mlk.adolffront.AdolfFront'
 }
 
+jar {
+    manifest {
+        attributes("Main-Class": 'net.mlk.adolffront.AdolfFront')
+    }
+}
+
+
 javafx {
     version = '17.0.6'
     modules = ['javafx.controls', 'javafx.fxml']
