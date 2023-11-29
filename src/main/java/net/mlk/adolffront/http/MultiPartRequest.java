@@ -1,4 +1,4 @@
-package multipart;
+package net.mlk.adolffront.http;
 
 import net.mlk.jmson.Json;
 
@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,10 +20,6 @@ public class MultiPartRequest {
     private URI uri;
     private String method;
     boolean opened = false;
-
-    public MultiPartRequest() {
-
-    }
 
     public MultiPartRequest(String url) {
         this.setUrl(url);
@@ -98,7 +95,7 @@ public class MultiPartRequest {
         }
     }
 
-    public MultiPartResponse send() throws IOException {
+    public Response send() throws IOException {
         HttpURLConnection connection;
         if (this.uri.getScheme().equalsIgnoreCase("https")) {
             connection = (HttpsURLConnection) this.uri.toURL().openConnection();
@@ -117,7 +114,7 @@ public class MultiPartRequest {
             outputStream.write(this.byteArrayOutputStream.toByteArray());
             outputStream.flush();
         }
-        return new MultiPartResponse(connection);
+        return new Response(connection);
     }
 
     public MultiPartRequest setRequestHeader(String header, String value) {
@@ -149,4 +146,62 @@ public class MultiPartRequest {
         return this;
     }
 
+    static class Response {
+        private final HttpURLConnection connection;
+        private final InputStream inputStream;
+        private String response;
+
+        public Response(HttpURLConnection connection) {
+            InputStream inputStream;
+            this.connection = connection;
+            try {
+                inputStream = connection.getInputStream();
+            } catch (IOException ex) {
+                inputStream = connection.getErrorStream();
+            }
+            this.inputStream = inputStream;
+        }
+
+        public Map<String, List<String>> getHeaders() {
+            return this.connection.getHeaderFields();
+        }
+
+        public int getResponseCode() {
+            try {
+                return this.connection.getResponseCode();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        public String getResponse() {
+            try {
+                return this.inputStream == null ? null : new String(readResponse(this.inputStream), StandardCharsets.UTF_8);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        public File saveFile(String path) {
+            File file = new File(path);
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                outputStream.write(readResponse(this.inputStream));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            return file;
+        }
+
+        private static byte[] readResponse(InputStream inputStream) throws IOException {
+            StringBuilder response = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            int b;
+            while ((b = inputStream.read()) != -1) {
+                byteArrayOutputStream.write(b);
+            }
+            in.close();
+            return byteArrayOutputStream.toByteArray();
+        }
+    }
 }
