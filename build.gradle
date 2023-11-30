@@ -1,7 +1,6 @@
 plugins {
     id 'java'
-    id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group 'net.mlk.adolffront'
@@ -17,11 +16,6 @@ dependencies {
     implementation 'libs:Jmson'
 }
 
-application {
-    mainModule = 'net.mlk.adolffront.adolffront'
-    mainClass = 'net.mlk.adolffront.AdolfFront'
-}
-
 javafx {
     version = '17.0.6'
     modules = ['javafx.controls']
@@ -29,6 +23,10 @@ javafx {
 
 jar {
     manifest {
-        attributes "Main-Class": application.mainClass
+        attributes 'Main-Class': 'net.mlk.adolffront.AdolfFront'
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }

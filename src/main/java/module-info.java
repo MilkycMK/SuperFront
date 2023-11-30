@@ -1,6 +1,6 @@
-module net.mlk.adolffront.adolffront {
+module net.mlk.adolffront {
     requires javafx.controls;
-    requires Jmson;
+    requires net.mlk.Jmson;
 
     exports net.mlk.adolffront;
 }
