@@ -1,7 +1,9 @@
 package net.mlk.adolffront;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.scene.Scene;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
@@ -18,12 +20,12 @@ public class AdolfFront extends Application {
     public void start(Stage stage) {
         AdolfFront.stage = stage;
         stage.setTitle("AdolfFront");
-        setupResizableListeners();
+        setupStageListeners();
         setScreen(new LoginRegisterScreen());
         stage.show();
     }
 
-    private static void setupResizableListeners() {
+    private static void setupStageListeners() {
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
             Environment.width = newVal.doubleValue();
             redrawCurrentScene();
@@ -41,6 +43,7 @@ public class AdolfFront extends Application {
 
     public static Stage setScreen(Pane screen, double width, double height) {
         stage.setScene(new Scene(screen, width, height));
+        stage.getScene().addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
         screen.setBackground(Environment.BACKGROUND);
         return stage;
     }
