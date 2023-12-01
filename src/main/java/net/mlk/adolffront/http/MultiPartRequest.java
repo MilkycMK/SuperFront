@@ -95,6 +95,13 @@ public class MultiPartRequest {
         }
     }
 
+    public MultiPartRequest addFiles(String field, List<File> files) {
+        for (File file : files) {
+            this.addFile(field, file);
+        }
+        return this;
+    }
+
     public Response send() throws IOException {
         HttpURLConnection connection;
         if (this.uri.getScheme().equalsIgnoreCase("https")) {

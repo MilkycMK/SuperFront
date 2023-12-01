@@ -2,7 +2,7 @@ package net.mlk.adolffront.controllers;
 
 import javafx.scene.input.KeyCode;
 import net.mlk.adolffront.Environment;
-import net.mlk.adolffront.http.HttpMethod;
+import net.mlk.adolffront.http.AdolfServer;
 import net.mlk.adolffront.http.MultiPartRequest;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
 import net.mlk.jmson.Json;
@@ -28,15 +28,15 @@ public class LoginRegisterController {
 
     public void onSubmitClick() {
         LoginRegisterScreen.ScreenType currentType = this.screen.getCurrentScreen();
-        String name = this.screen.getNameText();
+        String login = this.screen.getNameText();
         String password = this.screen.getPasswordText();
         String repeatPassword = this.screen.getRepeatPasswordText();
 
         try {
             if (currentType == LoginRegisterScreen.ScreenType.REGISTER) {
-                this.register(name, password, repeatPassword);
+                this.register(login, password, repeatPassword);
             } else {
-                this.login(name, password);
+                this.login(login, password);
             }
         } catch (IOException ex) {
             this.screen.setErrorText("Ошибка сети");
@@ -49,8 +49,8 @@ public class LoginRegisterController {
         Environment.token = json.getString("token");
     }
 
-    private void login(String name, String password) throws IOException {
-        if (name == null) {
+    private void login(String login, String password) throws IOException {
+        if (login == null) {
             this.screen.setErrorText("Введите логин");
             return;
         } else if (password == null) {
@@ -58,12 +58,7 @@ public class LoginRegisterController {
             return;
         }
 
-        Json json = new Json()
-                .append("login", name)
-                .append("password", password);
-        MultiPartRequest.Response response = new MultiPartRequest(Environment.LOGIN, HttpMethod.POST)
-                .addJsonData(json)
-                .send();
+        MultiPartRequest.Response response = AdolfServer.makeLoginRequest(login, password);
         if (response.getResponseCode() == 401) {
             this.screen.setErrorText("Неверный логин или пароль");
             return;
@@ -71,9 +66,9 @@ public class LoginRegisterController {
         this.login(response.getResponse());
     }
 
-    private void register(String name, String password, String repeatPassword) throws IOException {
-        if (name == null || name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH
-                || !LOGIN_PATTERN.matcher(name).matches()) {
+    private void register(String login, String password, String repeatPassword) throws IOException {
+        if (login == null || login.length() < MIN_NAME_LENGTH || login.length() > MAX_NAME_LENGTH
+                || !LOGIN_PATTERN.matcher(login).matches()) {
             this.screen.setErrorText("Логин должен быть длиной от 4 до 32 символов и состоять из латинских букв и цифр");
             return;
         } else if (password == null || password.length() < MIN_PASSWORD_LENGTH) {
@@ -84,22 +79,12 @@ public class LoginRegisterController {
             return;
         }
 
-        Json json = new Json()
-                .append("login", name)
-                .append("password", password);
-        MultiPartRequest.Response response = new MultiPartRequest(Environment.REGISTER, HttpMethod.POST)
-                .addJsonData(json)
-                .send();
+        MultiPartRequest.Response response = AdolfServer.makeRegisterRequest(login, password);
         if (response.getResponseCode() == 409) {
             this.screen.setErrorText("Пользователь уже существует.");
             return;
         }
         this.login(response.getResponse());
-    }
-
-    public static void logout() throws IOException{
-        MultiPartRequest.Response response = new MultiPartRequest(Environment.LOGOUT, HttpMethod.POST)
-                .send();
     }
 
 }
