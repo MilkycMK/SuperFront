@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
-import net.mlk.adolffront.utils.Resizable;
+import net.mlk.adolffront.utils.IResizable;
 
 public class AdolfFront extends Application {
     private static Stage stage;
@@ -47,8 +47,8 @@ public class AdolfFront extends Application {
 
     public static void redrawCurrentScene() {
         Scene currentScene = stage.getScene();
-        if (currentScene != null && currentScene.getRoot() instanceof Resizable) {
-            ((Resizable) currentScene.getRoot()).redraw();
+        if (currentScene != null && currentScene.getRoot() instanceof IResizable) {
+            ((IResizable) currentScene.getRoot()).redraw();
         }
     }
 

@@ -1,6 +1,6 @@
 package net.mlk.adolffront.utils;
 
-public interface Resizable {
+public interface IResizable {
 
     void redraw();
 

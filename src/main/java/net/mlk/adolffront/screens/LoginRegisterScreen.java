@@ -13,10 +13,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.controllers.LoginRegisterController;
-import net.mlk.adolffront.utils.Resizable;
+import net.mlk.adolffront.utils.IResizable;
 import net.mlk.adolffront.utils.StyleUtils;
 
-public class LoginRegisterScreen extends BorderPane implements Resizable {
+public class LoginRegisterScreen extends BorderPane implements IResizable {
     public enum ScreenType { LOGIN, REGISTER }
     private final LoginRegisterController controller;
     private ScreenType currentScreen;
