@@ -9,8 +9,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.controllers.LoginRegisterController;
 import net.mlk.adolffront.utils.IResizable;
@@ -20,6 +22,7 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
     public enum ScreenType { LOGIN, REGISTER }
     private final LoginRegisterController controller;
     private ScreenType currentScreen;
+    private Text errorText = new Text();
     private TextField usernameField;
     private PasswordField passwordField;
     private PasswordField passwordRepeatField;
@@ -36,6 +39,10 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
         double fieldHeight = height / 10;
         Font font = StyleUtils.createFont(fieldWidth / 15);
         Font headerFont = StyleUtils.createFont(fieldWidth / 8);
+
+        this.errorText = StyleUtils.createText(errorText.getText(), font, Color.RED);
+        this.errorText.setTextAlignment(TextAlignment.CENTER);
+        this.errorText.setWrappingWidth(fieldWidth);
 
         VBox form = new VBox();
         ObservableList<Node> child = form.getChildren();
@@ -65,10 +72,14 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
                     font, fieldWidth, fieldHeight);
             child.add(passwordRepeatField);
         }
-        child.addAll(submitButton, changeScreen);
+        child.addAll(submitButton, changeScreen, this.errorText);
 
         super.setCenter(form);
         this.currentScreen = screenType;
+    }
+
+    public void setErrorText(String text) {
+        this.errorText.setText(text);
     }
 
     public String getNameText() {
