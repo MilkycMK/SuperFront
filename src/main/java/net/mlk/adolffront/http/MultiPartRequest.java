@@ -25,7 +25,7 @@ public class MultiPartRequest {
         this.setUrl(url);
     }
 
-    public MultiPartRequest(String url, String method) {
+    public MultiPartRequest(String url, HttpMethod method) {
         this.setUrl(url).setMethod(method);
     }
 
@@ -127,12 +127,13 @@ public class MultiPartRequest {
         return this;
     }
 
-    public MultiPartRequest setMethod(String method) {
-        if (method.equalsIgnoreCase("PATCH")) {
+    public MultiPartRequest setMethod(HttpMethod method) {
+        String str = method.toString();
+        if (str.equalsIgnoreCase("PATCH")) {
             this.headers.put("X-HTTP-Method-Override", "PATCH");
             this.method = "POST";
         } else {
-            this.method = method;
+            this.method = str;
         }
         return this;
     }
@@ -146,7 +147,7 @@ public class MultiPartRequest {
         return this;
     }
 
-    static class Response {
+    public static class Response {
         private final HttpURLConnection connection;
         private final InputStream inputStream;
         private String response;
