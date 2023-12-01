@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group 'net.mlk.adolffront'
@@ -16,17 +15,8 @@ dependencies {
     implementation 'libs:Jmson'
 }
 
-javafx {
-    version = '17.0.6'
-    modules = ['javafx.controls']
-}
-
 jar {
     manifest {
         attributes 'Main-Class': 'net.mlk.adolffront.AdolfFront'
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
 }
