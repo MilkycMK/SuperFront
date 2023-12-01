@@ -2,6 +2,7 @@ package net.mlk.adolffront.screens;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -54,6 +55,7 @@ public class LoginRegisterScreen extends BorderPane implements Resizable {
 
         Text changeScreen = StyleUtils.createText(screenType == ScreenType.LOGIN ? "Регистрация" : "Вход", font,
                 Environment.BUTTONS_COLOR);
+        changeScreen.setCursor(Cursor.HAND);
         changeScreen.setOnMouseClicked((e) -> this.drawScreen(this.currentScreen == ScreenType.LOGIN ?
                 ScreenType.REGISTER : ScreenType.LOGIN));
 
