@@ -109,11 +109,13 @@ public class MultiPartRequest {
         if (!connection.getRequestMethod().equalsIgnoreCase("GET")) {
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + this.boundary);
-            BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
-            this.byteArrayOutputStream.write("--".getBytes());
-            outputStream.write(this.byteArrayOutputStream.toByteArray());
-            outputStream.flush();
+            try (BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream())) {
+                this.byteArrayOutputStream.write("--".getBytes());
+                outputStream.write(this.byteArrayOutputStream.toByteArray());
+                outputStream.flush();
+            }
         }
+        connection.disconnect();
         return new Response(connection);
     }
 
@@ -177,7 +179,8 @@ public class MultiPartRequest {
 
         public String getResponse() {
             try {
-                return this.inputStream == null ? null : new String(readResponse(this.inputStream), StandardCharsets.UTF_8);
+                return this.inputStream == null ? null :
+                        new String(readResponse(), StandardCharsets.UTF_8);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -186,22 +189,23 @@ public class MultiPartRequest {
         public File saveFile(String path) {
             File file = new File(path);
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                outputStream.write(readResponse(this.inputStream));
+                outputStream.write(readResponse());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             return file;
         }
 
-        private static byte[] readResponse(InputStream inputStream) throws IOException {
+        private byte[] readResponse() throws IOException {
             StringBuilder response = new StringBuilder();
-            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.inputStream, StandardCharsets.UTF_8));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             int b;
-            while ((b = inputStream.read()) != -1) {
+            while ((b = this.inputStream.read()) != -1) {
                 byteArrayOutputStream.write(b);
             }
             in.close();
+            this.connection.disconnect();
             return byteArrayOutputStream.toByteArray();
         }
     }
