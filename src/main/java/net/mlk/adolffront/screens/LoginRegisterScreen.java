@@ -63,14 +63,17 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
         Text changeScreen = StyleUtils.createText(screenType == ScreenType.LOGIN ? "Регистрация" : "Вход", font,
                 Environment.BUTTONS_COLOR);
         changeScreen.setCursor(Cursor.HAND);
-        changeScreen.setOnMouseClicked((e) -> this.drawScreen(this.currentScreen == ScreenType.LOGIN ?
-                ScreenType.REGISTER : ScreenType.LOGIN));
+        changeScreen.setOnMouseClicked((e) -> {
+            this.drawScreen(this.currentScreen == ScreenType.LOGIN ?
+                    ScreenType.REGISTER : ScreenType.LOGIN);
+            this.errorText.setText("");
+        });
 
         child.addAll(text, this.usernameField, this.passwordField);
         if (screenType == ScreenType.REGISTER) {
             this.passwordRepeatField = StyleUtils.createPasswordField(this.getRepeatPasswordText(), "Повтор пароля",
                     font, fieldWidth, fieldHeight);
-            child.add(passwordRepeatField);
+            child.add(this.passwordRepeatField);
         }
         child.addAll(submitButton, changeScreen, this.errorText);
 
