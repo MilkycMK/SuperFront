@@ -5,12 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
-import net.mlk.adolffront.utils.notifications.Notification;
 import net.mlk.adolffront.utils.Resizable;
-import net.mlk.adolffront.utils.notifications.NotificationPanel;
-import net.mlk.adolffront.utils.notifications.NotificationScreen;
-
-import java.util.ArrayList;
 
 public class AdolfFront extends Application {
     private static Stage stage;
