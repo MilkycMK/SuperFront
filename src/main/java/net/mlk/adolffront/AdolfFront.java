@@ -25,6 +25,7 @@ public class AdolfFront extends Application {
         AdolfFront.stage = stage;
         stage.setTitle("AdolfFront");
         setupStageListeners();
+
         File tokenFile = new File(Environment.filePath);
         if (!tokenFile.exists()) {
             setScreen(new LoginRegisterScreen());
@@ -42,6 +43,14 @@ public class AdolfFront extends Application {
     public static void loadUserProfile(Json json) {
         Environment.name = json.getString("name");
         Environment.token = json.getString("token");
+    }
+
+    public static void deleteUserProfile() {
+        File userProfileFile = new File(Environment.filePath);
+        if (userProfileFile.exists()) {
+            userProfileFile.delete();
+        }
+        setScreen(new LoginRegisterScreen());
     }
 
     public static Stage setScreen(Pane screen) {
