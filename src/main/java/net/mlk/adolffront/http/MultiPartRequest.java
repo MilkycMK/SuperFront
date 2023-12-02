@@ -159,7 +159,7 @@ public class MultiPartRequest {
     public static class Response {
         private final HttpURLConnection connection;
         private final InputStream inputStream;
-        private String response;
+        private byte[] response;
 
         public Response(HttpURLConnection connection) {
             InputStream inputStream;
@@ -186,17 +186,23 @@ public class MultiPartRequest {
 
         public String getResponse() {
             try {
-                return this.inputStream == null ? null :
-                        new String(readResponse(), StandardCharsets.UTF_8);
+                if (this.response == null) {
+                    this.response = this.readResponse();
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+            return this.response == null ? null : new String(this.response, StandardCharsets.UTF_8);
         }
 
         public File saveFile(String path) {
             File file = new File(path);
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                outputStream.write(readResponse());
+                if (this.response == null) {
+                    this.response = this.readResponse();
+                } else {
+                    outputStream.write(this.response);
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -204,7 +210,9 @@ public class MultiPartRequest {
         }
 
         private byte[] readResponse() throws IOException {
-            StringBuilder response = new StringBuilder();
+            if (this.inputStream == null) {
+                return null;
+            }
             BufferedReader in = new BufferedReader(new InputStreamReader(this.inputStream, StandardCharsets.UTF_8));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             int b;
