@@ -28,8 +28,8 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
     private PasswordField passwordRepeatField;
 
     public LoginRegisterScreen() {
-        this.drawScreen(ScreenType.LOGIN);
         this.controller = new LoginRegisterController(this);
+        this.drawScreen(ScreenType.LOGIN);
     }
 
     public void drawScreen(ScreenType screenType) {
