@@ -6,9 +6,13 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
+import java.io.File;
 import java.net.URL;
 
 public class Environment {
+    private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
+    public static String filePath = isWindows ? System.getenv("LOCALAPPDATA") + "/.mlkit/tk.json" :
+            System.getProperty("user.home") + "/.mlkit/tk.json";
     public static String token;
     public static String name;
 
@@ -35,6 +39,7 @@ public class Environment {
             new Background(new BackgroundFill(BACKGROUND_COLOR, new CornerRadii(ROUND), Insets.EMPTY));
 
     public static final String URL = "https://mamamia.mom:8443";
+
     public static final String LOGIN = URL + "/signin";
     public static final String REGISTER = URL + "/signup";
     public static final String LOGOUT = URL + "/logout";

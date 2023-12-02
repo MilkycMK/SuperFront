@@ -159,7 +159,7 @@ public class MultiPartRequest {
     public static class Response {
         private final HttpURLConnection connection;
         private final InputStream inputStream;
-        private byte[] response;
+        private byte[] response = new byte[0];
 
         public Response(HttpURLConnection connection) {
             InputStream inputStream;
@@ -186,32 +186,41 @@ public class MultiPartRequest {
 
         public String getResponse() {
             try {
-                if (this.response == null) {
+                if (this.response.length == 0) {
                     this.response = this.readResponse();
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            return this.response == null ? null : new String(this.response, StandardCharsets.UTF_8);
+            return new String(this.response, StandardCharsets.UTF_8);
         }
 
         public File saveFile(String path) {
-            File file = new File(path);
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                if (this.response == null) {
-                    this.response = this.readResponse();
-                } else {
-                    outputStream.write(this.response);
+            try {
+                File file = new File(path);
+                File parent = file.getParentFile();
+                if (parent != null && !parent.exists()) {
+                    parent.mkdirs();
                 }
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+
+                FileOutputStream outputStream = new FileOutputStream(file);
+                if (this.response.length == 0) {
+                    this.response = this.readResponse();
+                }
+                outputStream.write(this.response);
+                outputStream.close();
+                return file;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            return file;
         }
 
         private byte[] readResponse() throws IOException {
             if (this.inputStream == null) {
-                return null;
+                return new byte[0];
             }
             BufferedReader in = new BufferedReader(new InputStreamReader(this.inputStream, StandardCharsets.UTF_8));
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

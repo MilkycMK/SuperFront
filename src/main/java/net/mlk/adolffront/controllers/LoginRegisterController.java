@@ -1,12 +1,14 @@
 package net.mlk.adolffront.controllers;
 
 import javafx.scene.input.KeyCode;
+import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.http.AdolfServer;
 import net.mlk.adolffront.http.MultiPartRequest;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
 import net.mlk.jmson.Json;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
@@ -43,12 +45,6 @@ public class LoginRegisterController {
         }
     }
 
-    private void login(String data) {
-        Json json = new Json(data);
-        Environment.name = json.getString("name");
-        Environment.token = json.getString("token");
-    }
-
     private void login(String login, String password) throws IOException {
         if (login == null) {
             this.screen.setErrorText("Введите логин");
@@ -63,7 +59,7 @@ public class LoginRegisterController {
             this.screen.setErrorText("Неверный логин или пароль");
             return;
         }
-        this.login(response.getResponse());
+        AdolfFront.loadUserProfile(response.saveFile(Environment.filePath));
     }
 
     private void register(String login, String password, String repeatPassword) throws IOException {
@@ -84,7 +80,7 @@ public class LoginRegisterController {
             this.screen.setErrorText("Пользователь уже существует.");
             return;
         }
-        this.login(response.getResponse());
+        AdolfFront.loadUserProfile(response.saveFile(Environment.filePath));
     }
 
 }

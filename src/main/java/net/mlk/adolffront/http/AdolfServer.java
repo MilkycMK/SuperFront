@@ -21,7 +21,16 @@ public class AdolfServer {
     }
 
     public static void makeLogoutRequest() throws IOException {
-        new MultiPartRequest(Environment.LOGOUT, HttpMethod.POST).send();
+        new MultiPartRequest(Environment.LOGOUT, HttpMethod.POST)
+                .setRequestHeader("Authorization", Environment.token)
+                .send();
+    }
+
+    public static MultiPartRequest.Response makeTokenRequest(String url, HttpMethod method, Json json) throws IOException {
+        return new MultiPartRequest(url, method)
+                .setRequestHeader("Authorization", Environment.token)
+                .addJsonData(json)
+                .send();
     }
 
     public static MultiPartRequest.Response makeRequest(String url, HttpMethod method, Json json) throws IOException {
