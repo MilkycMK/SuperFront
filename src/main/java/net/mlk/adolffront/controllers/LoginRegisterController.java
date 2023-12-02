@@ -6,9 +6,6 @@ import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.http.AdolfServer;
 import net.mlk.adolffront.http.MultiPartRequest;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
-import net.mlk.jmson.Json;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
