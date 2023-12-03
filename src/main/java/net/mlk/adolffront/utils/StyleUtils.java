@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -18,6 +19,20 @@ public class StyleUtils {
 
     public static void setTextColor(Node node, String color) {
         node.setStyle(String.format("-fx-text-fill: %s;", color));
+    }
+
+    public static void setBackground(Node node, Color color) {
+        String hexColor = toHexString(color);
+        node.setStyle(String.format("-fx-background: %s;-fx-border-color: %s;" +
+                "-fx-focus-color: transparent;-fx-faint-focus-color: transparent;", hexColor, hexColor));
+    }
+
+    public static String toHexString(Color color) {
+        int r = ((int) Math.round(color.getRed() * 255)) << 24;
+        int g = ((int) Math.round(color.getGreen() * 255)) << 16;
+        int b = ((int) Math.round(color.getBlue() * 255)) << 8;
+        int a = ((int) Math.round(color.getOpacity() * 255));
+        return String.format("#%08X", (r + g + b + a));
     }
 
     public static Text createText(String content) {
@@ -75,14 +90,17 @@ public class StyleUtils {
     }
 
     public static Button createButton(String text, Font font, double width, double height) {
+        return createButton(text, font, Environment.BUTTON_BACKGROUND, width, height);
+    }
+
+    public static Button createButton(String text, Font font, Background background, double width, double height) {
         Button button = new Button(text);
-        button.setMaxWidth(width);
+        button.setMinWidth(width);
         button.setMinHeight(height);
         button.setFont(font);
         button.setCursor(Cursor.HAND);
-        button.setBackground(Environment.BUTTON_BACKGROUND);
+        button.setBackground(background);
         setTextColor(button, "white");
-
         return button;
     }
 
