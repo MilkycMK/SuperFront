@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MenuScreen extends BorderPane implements IResizable {
-    private final ArrayList<MenuElement> elements = new ArrayList<>();
-    private MenuElement currentElement;
+    private final ArrayList<AbstractMenuElement> elements = new ArrayList<>();
+    private AbstractMenuElement currentElement;
 
     public MenuScreen() {
         this.drawMenu();
@@ -33,7 +33,7 @@ public class MenuScreen extends BorderPane implements IResizable {
         menu.setMinHeight(height);
         menu.setBackground(Environment.MENU_BACKGROUND);
 
-        for (MenuElement element : this.elements) {
+        for (AbstractMenuElement element : this.elements) {
             Background background = Environment.MENU_BACKGROUND;
             if (this.currentElement == element) {
                 background = Environment.BACKGROUND;
@@ -54,13 +54,13 @@ public class MenuScreen extends BorderPane implements IResizable {
         super.setTop(menu);
     }
 
-    public MenuScreen addElement(MenuElement element) {
+    public MenuScreen addElement(AbstractMenuElement element) {
         this.elements.add(element);
         this.redraw();
         return this;
     }
 
-    public MenuScreen addElements(Collection<MenuElement> elements) {
+    public MenuScreen addElements(Collection<AbstractMenuElement> elements) {
         this.elements.addAll(elements);
         this.redraw();
         return this;
