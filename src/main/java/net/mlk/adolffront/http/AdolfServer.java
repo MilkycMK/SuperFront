@@ -1,5 +1,6 @@
 package net.mlk.adolffront.http;
 
+import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
 import net.mlk.jmson.Json;
 import java.io.IOException;
@@ -25,10 +26,15 @@ public class AdolfServer {
     }
 
     public static MultiPartRequest.Response makeTokenRequest(String url, HttpMethod method, Json json) throws IOException {
-        return new MultiPartRequest(url, method)
+        MultiPartRequest.Response response = new MultiPartRequest(url, method)
                 .setRequestHeader("Authorization", Environment.token)
                 .addJsonData(json)
                 .send();
+        if (response.getResponseCode() == 401) {
+            AdolfFront.deleteUserProfile();
+            return null;
+        }
+        return response;
     }
 
     public static MultiPartRequest.Response makeRequest(String url, HttpMethod method, Json json) throws IOException {
