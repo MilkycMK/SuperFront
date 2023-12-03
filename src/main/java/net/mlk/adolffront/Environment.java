@@ -31,8 +31,8 @@ public class Environment {
     public static final Background BACKGROUND =
             new Background(new BackgroundFill(BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY));
 
-    public static final Background NOTIFICATION_BACKGROUND =
-            new Background(new BackgroundFill(PANELS_COLOR, new CornerRadii(ROUND, 0, 0, ROUND, false), Insets.EMPTY));
+    public static final Background MENU_BACKGROUND =
+            new Background(new BackgroundFill(PANELS_COLOR, CornerRadii.EMPTY, new Insets(0, 0, 10, 0)));
     public static final Background BUTTON_BACKGROUND =
             new Background(new BackgroundFill(BUTTONS_COLOR, new CornerRadii(ROUND), Insets.EMPTY));
     public static final Background TEXTFIELD_BACKGROUND =
@@ -43,5 +43,8 @@ public class Environment {
     public static final String LOGIN = URL + "/signin";
     public static final String REGISTER = URL + "/signup";
     public static final String LOGOUT = URL + "/logout";
+
+    public static final String TODO_ELEMENT = URL + "/todo/%s";
+
 
 }
