@@ -3,15 +3,19 @@ package net.mlk.adolffront;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
-import net.mlk.adolffront.screens.TodoScreen;
+import net.mlk.adolffront.screens.menu.MenuElement;
+import net.mlk.adolffront.screens.menu.MenuScreen;
+import net.mlk.adolffront.screens.todo.TodoScreen;
 import net.mlk.adolffront.utils.IResizable;
 import net.mlk.jmson.Json;
 
 import java.io.File;
+import java.io.IOException;
 
 public class AdolfFront extends Application {
     private static Stage stage;
@@ -23,6 +27,7 @@ public class AdolfFront extends Application {
     @Override
     public void start(Stage stage) {
         AdolfFront.stage = stage;
+        stage.getIcons().add(new Image(AdolfFront.class.getResourceAsStream("/assets/logo.png")));
         stage.setTitle("AdolfFront");
         setupStageListeners();
 
@@ -37,7 +42,11 @@ public class AdolfFront extends Application {
 
     public static void loadUserProfile(File file) {
         loadUserProfile(new Json(file));
-        setScreen(new TodoScreen());
+        MenuScreen screen = new MenuScreen();
+        screen.addElement(new TodoScreen());
+        screen.addElement(new MenuElement("Финансы"));
+        screen.addElement(new MenuElement("Расписание"));
+        setScreen(screen);
     }
 
     public static void loadUserProfile(Json json) {
