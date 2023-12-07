@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -100,7 +101,17 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
         this.passwordField = StyleUtils.createPasswordField(null, "Пароль", font, 0, 0);
         this.passwordRepeatField = StyleUtils.createPasswordField(null, "Повтор пароля", font, 0, 0);
         this.submitButton = StyleUtils.createButton(null, font, 0, 0);
-        submitButton.setOnAction((e) -> this.controller.onSubmitClick());
+        this.submitButton.setOnAction((e) ->
+                this.controller.onSubmitClick(this.currentScreen, usernameField.getText(),
+                        passwordField.getText(), passwordRepeatField.getText())
+        );
+
+        super.setOnKeyPressed((e) -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                this.controller.onSubmitClick(this.currentScreen, usernameField.getText(),
+                        passwordField.getText(), passwordRepeatField.getText());
+            }
+        });
 
         this.changeScreen = StyleUtils.createText(null, font, Environment.BUTTONS_COLOR);
         this.changeScreen.setCursor(Cursor.HAND);

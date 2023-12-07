@@ -18,21 +18,11 @@ public class LoginRegisterController {
 
     public LoginRegisterController(LoginRegisterScreen screen) {
         this.screen = screen;
-        screen.setOnKeyPressed((e) -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                this.onSubmitClick();
-            }
-        });
     }
 
-    public void onSubmitClick() {
-        LoginRegisterScreen.ScreenType currentType = this.screen.getCurrentScreen();
-        String login = this.screen.getNameText();
-        String password = this.screen.getPasswordText();
-        String repeatPassword = this.screen.getRepeatPasswordText();
-
+    public void onSubmitClick(LoginRegisterScreen.ScreenType screenType, String login, String password, String repeatPassword) {
         try {
-            if (currentType == LoginRegisterScreen.ScreenType.REGISTER) {
+            if (screenType == LoginRegisterScreen.ScreenType.REGISTER) {
                 this.register(login, password, repeatPassword);
             } else {
                 this.login(login, password);
