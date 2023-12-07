@@ -102,14 +102,14 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
         this.passwordRepeatField = StyleUtils.createPasswordField(null, "Повтор пароля", font, 0, 0);
         this.submitButton = StyleUtils.createButton(null, font, 0, 0);
         this.submitButton.setOnAction((e) ->
-                this.controller.onSubmitClick(this.currentScreen, usernameField.getText(),
-                        passwordField.getText(), passwordRepeatField.getText())
+                this.controller.onSubmitClick(this.currentScreen, this.usernameField.getText(),
+                        this.passwordField.getText(), this.passwordRepeatField.getText())
         );
 
         super.setOnKeyPressed((e) -> {
             if (e.getCode() == KeyCode.ENTER) {
-                this.controller.onSubmitClick(this.currentScreen, usernameField.getText(),
-                        passwordField.getText(), passwordRepeatField.getText());
+                this.controller.onSubmitClick(this.currentScreen, this.usernameField.getText(),
+                        this.passwordField.getText(), this.passwordRepeatField.getText());
             }
         });
 
