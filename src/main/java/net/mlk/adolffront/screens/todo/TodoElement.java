@@ -1,7 +1,15 @@
 package net.mlk.adolffront.screens.todo;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.utils.IResizable;
+import net.mlk.adolffront.utils.StyleUtils;
 import net.mlk.jmson.annotations.JsonField;
 import net.mlk.jmson.utils.JsonConvertible;
 
@@ -24,25 +32,30 @@ public class TodoElement extends BorderPane implements JsonConvertible, IResizab
     }
 
     public void drawElement() {
+        super.setPadding(new Insets(Environment.width / 20));
+        double width = Environment.width / 1.8;
+        Font topicFont = StyleUtils.createFont(FontWeight.BOLD, width / 20);
 
+        VBox form = new VBox();
+        form.setSpacing(Environment.height / 22);
+        TextArea headerArea = StyleUtils.createTextArea(null, null, topicFont, Environment.PANELS_COLOR, width, width / 3.5);
+        headerArea.setWrapText(true);
+        StyleUtils.setMaxTextLength(headerArea, 128);
+        TextArea descriptionArea = StyleUtils.createTextArea(null, null, topicFont, Environment.PANELS_COLOR, width, width / 2);
+        StyleUtils.setMaxTextLength(headerArea, 3000);
+        descriptionArea.setWrapText(true);
+        DatePicker picker = new DatePicker();
+
+        form.getChildren().addAll(headerArea, descriptionArea, picker);
+        super.setTop(form);
     }
 
     public String getTopic() {
         return this.topic;
     }
 
-    public TodoElement setTopic(String topic) {
-        this.topic = topic;
-        return this;
-    }
-
     public String getDescription() {
         return this.description;
-    }
-
-    public TodoElement setDescription(String description) {
-        this.description = description;
-        return this;
     }
 
     public LocalDateTime getCreationTime() {
@@ -51,10 +64,6 @@ public class TodoElement extends BorderPane implements JsonConvertible, IResizab
 
     public LocalDateTime getTaskTime() {
         return this.taskTime;
-    }
-
-    public void setTaskTime(LocalDateTime taskTime) {
-        this.taskTime = taskTime;
     }
 
     public ArrayList<TodoFile> getFiles() {

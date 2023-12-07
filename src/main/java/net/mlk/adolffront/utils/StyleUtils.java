@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import net.mlk.adolffront.Environment;
 
@@ -49,11 +50,19 @@ public class StyleUtils {
     }
 
     public static Font createFont(double size) {
-        return createFont("Inter Bold", size);
+        return createFont("Inter", size);
     }
 
     public static Font createFont(String family, double size) {
-        return Font.font(family, size);
+        return createFont(family, FontWeight.NORMAL, size);
+    }
+
+    public static Font createFont(FontWeight weight, double size) {
+        return Font.font("Inter", weight, size);
+    }
+
+    public static Font createFont(String family, FontWeight fontWeight, double size) {
+        return Font.font(family, fontWeight, size);
     }
 
     public static TextField createTextField(String defaultText, String placeholder, Font font, double width,
@@ -96,6 +105,20 @@ public class StyleUtils {
         });
         return field;
     }
+
+//    public static TextInputControl setAutoHeight(TextInputControl field) {
+//        field.textProperty().addListener((observableValue, string, t1) -> {
+//            int numLines = (int) Math.ceil((double) t1.length() / (field.getWidth() / 16.6));
+//            double newHeight = numLines * field.getFont().getSize();
+//
+//            if (!t1.isEmpty() && t1.charAt(t1.length() - 1) == '\n') {
+//                newHeight += field.getFont().getSize();
+//            }
+//
+//            field.setMinHeight(newHeight * 1.75);
+//        });
+//        return field;
+//    }
 
     public static PasswordField createPasswordField(String defaultText, String placeholder, Font font, double width,
                                                     double height) {
