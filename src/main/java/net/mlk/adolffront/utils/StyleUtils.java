@@ -2,9 +2,7 @@ package net.mlk.adolffront.utils;
 
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -13,18 +11,14 @@ import net.mlk.adolffront.Environment;
 
 public class StyleUtils {
 
-    public static void setInnerTextColor(Node node, String color) {
-        node.setStyle(String.format("-fx-text-inner-color: %s;", color));
-    }
-
     public static void setTextColor(Node node, String color) {
-        node.setStyle(String.format("-fx-text-fill: %s;", color));
+        node.setStyle(String.format("-fx-text-fill: %s; -fx-text-inner-color: %s;", color, color, color));
     }
 
     public static void setBackground(Node node, Color color) {
         String hexColor = toHexString(color);
-        node.setStyle(String.format("-fx-background: %s;-fx-border-color: %s;" +
-                "-fx-focus-color: transparent;-fx-faint-focus-color: transparent;", hexColor, hexColor));
+        node.setStyle(String.format("-fx-control-inner-background: %s; -fx-background: %s; -fx-background-color: transparent;" +
+                " -fx-focus-color: transparent; -fx-faint-focus-color: transparent;", hexColor, hexColor));
     }
 
     public static String toHexString(Color color) {
@@ -64,15 +58,43 @@ public class StyleUtils {
 
     public static TextField createTextField(String defaultText, String placeholder, Font font, double width,
                                             double height) {
+        return createTextField(defaultText, placeholder, font, Environment.TEXTFIELD_BACKGROUND, width, height);
+    }
+
+    public static TextField createTextField(String defaultText, String placeholder, Font font, Background background,
+                                            double width, double height) {
         TextField newField = new TextField(defaultText);
         newField.setPromptText(placeholder);
         newField.setBackground(Environment.TEXTFIELD_BACKGROUND);
         newField.setFont(font);
         newField.setMaxWidth(width);
+        newField.setMinWidth(width);
         newField.setMinHeight(height);
-        setInnerTextColor(newField, "white");
+        setTextColor(newField, "white");
 
         return newField;
+    }
+
+    public static TextArea createTextArea(String defaultText, String placeholder, Font font, Color background,
+                                          double width, double height) {
+        TextArea textArea = new TextArea(defaultText);
+        textArea.setPromptText(placeholder);
+        textArea.setFont(font);
+        textArea.setMaxSize(width, height);
+        textArea.setMinSize(width, height);
+        setTextColor(textArea, "white");
+        setBackground(textArea, background);
+
+        return textArea;
+    }
+
+    public static TextInputControl setMaxTextLength(TextInputControl field, int max) {
+        field.textProperty().addListener((observableValue, string, t1) -> {
+            if (field.getText().length() > max) {
+                field.setText(field.getText(0, max));
+            }
+        });
+        return field;
     }
 
     public static PasswordField createPasswordField(String defaultText, String placeholder, Font font, double width,
@@ -84,7 +106,7 @@ public class StyleUtils {
         newField.setFont(font);
         newField.setMaxWidth(width);
         newField.setMinHeight(height);
-        setInnerTextColor(newField, "white");
+        setTextColor(newField, "white");
 
         return newField;
     }

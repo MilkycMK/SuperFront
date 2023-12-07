@@ -8,14 +8,12 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.LoginRegisterScreen;
-import net.mlk.adolffront.screens.menu.MenuElement;
 import net.mlk.adolffront.screens.menu.MenuScreen;
 import net.mlk.adolffront.screens.todo.TodoScreen;
 import net.mlk.adolffront.utils.IResizable;
 import net.mlk.jmson.Json;
 
 import java.io.File;
-import java.io.IOException;
 
 public class AdolfFront extends Application {
     private static Stage stage;
@@ -43,9 +41,7 @@ public class AdolfFront extends Application {
     public static void loadUserProfile(File file) {
         loadUserProfile(new Json(file));
         MenuScreen screen = new MenuScreen();
-        screen.addElement(new TodoScreen());
-        screen.addElement(new MenuElement("Финансы"));
-        screen.addElement(new MenuElement("Расписание"));
+        screen.addElements(new TodoScreen(), new TodoScreen(), new TodoScreen());
         setScreen(screen);
     }
 
@@ -67,6 +63,9 @@ public class AdolfFront extends Application {
     }
 
     public static Stage setScreen(Pane screen, double width, double height) {
+        if (stage.getScene() != null && stage.getScene().getRoot() != null) {
+            ((Pane) stage.getScene().getRoot()).getChildren().clear();
+        }
         stage.setScene(new Scene(screen, width, height));
         stage.getScene().addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
         screen.setBackground(Environment.BACKGROUND);

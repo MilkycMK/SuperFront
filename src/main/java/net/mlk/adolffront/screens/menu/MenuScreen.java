@@ -10,7 +10,7 @@ import net.mlk.adolffront.utils.IResizable;
 import net.mlk.adolffront.utils.StyleUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 
 public class MenuScreen extends BorderPane implements IResizable {
     private final ArrayList<AbstractMenuElement> elements = new ArrayList<>();
@@ -38,8 +38,7 @@ public class MenuScreen extends BorderPane implements IResizable {
             if (this.currentElement == element) {
                 background = Environment.BACKGROUND;
             }
-            Button button = StyleUtils.createButton(element.getName(), font, background, elementsWidth,
-                    height - 10);
+            Button button = StyleUtils.createButton(element.getName(), font, background, elementsWidth, height - 10);
             button.setOnMouseClicked((e) -> {
                 this.currentElement = element;
                 this.redraw();
@@ -55,13 +54,11 @@ public class MenuScreen extends BorderPane implements IResizable {
     }
 
     public MenuScreen addElement(AbstractMenuElement element) {
-        this.elements.add(element);
-        this.redraw();
-        return this;
+        return this.addElements(element);
     }
 
-    public MenuScreen addElements(Collection<AbstractMenuElement> elements) {
-        this.elements.addAll(elements);
+    public MenuScreen addElements(AbstractMenuElement... elements) {
+        this.elements.addAll(Arrays.asList(elements));
         this.redraw();
         return this;
     }
@@ -69,5 +66,6 @@ public class MenuScreen extends BorderPane implements IResizable {
     @Override
     public void redraw() {
         this.drawMenu();
+        this.currentElement.redraw();
     }
 }
