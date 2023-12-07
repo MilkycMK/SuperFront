@@ -4,9 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,13 +20,18 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
     public enum ScreenType { LOGIN, REGISTER }
     private final LoginRegisterController controller;
     private ScreenType currentScreen;
-    private Text errorText = new Text();
+    private VBox form;
+    private Text header;
     private TextField usernameField;
     private PasswordField passwordField;
     private PasswordField passwordRepeatField;
+    private Button submitButton;
+    private Text changeScreen;
+    private Text errorText;
 
     public LoginRegisterScreen() {
         this.controller = new LoginRegisterController(this);
+        this.initFields();
         this.drawScreen(ScreenType.LOGIN);
     }
 
@@ -40,45 +43,79 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
         Font font = StyleUtils.createFont(fieldWidth / 15);
         Font headerFont = StyleUtils.createFont(fieldWidth / 8);
 
-        this.errorText = StyleUtils.createText(errorText.getText(), font, Color.RED);
-        this.errorText.setTextAlignment(TextAlignment.CENTER);
+        this.form.setSpacing(height / 30);
+        this.form.setMaxWidth(width);
+        this.form.setMaxHeight(height);
+
         this.errorText.setWrappingWidth(fieldWidth);
 
-        VBox form = new VBox();
-        ObservableList<Node> child = form.getChildren();
-        form.setBackground(Environment.PANELS_BACKGROUND);
-        form.setAlignment(Pos.CENTER);
-        form.setSpacing(height / 30);
-        form.setMaxWidth(width);
-        form.setMaxHeight(height);
+        if (screenType == ScreenType.REGISTER) {
+            this.header.setText("Регистрация");
+            this.submitButton.setText("Зарегистрироваться");
+            this.changeScreen.setText("Войти");
+            this.form.getChildren().add(3, this.passwordRepeatField);
+        } else {
+            this.header.setText("Авторизация");
+            this.submitButton.setText("Войти");
+            this.changeScreen.setText("Регистрация");
+            this.form.getChildren().remove(this.passwordRepeatField);
+        }
 
-        Text text = StyleUtils.createText(screenType == ScreenType.LOGIN ? "Авторизация" : "Регистрация", headerFont);
-        this.usernameField = StyleUtils.createTextField(this.getNameText(), "Логин", font, fieldWidth, fieldHeight);
-        this.passwordField = StyleUtils.createPasswordField(this.getPasswordText(), "Пароль", font, fieldWidth,
-                fieldHeight);
-        Button submitButton = StyleUtils.createButton(screenType == ScreenType.LOGIN ? "Войти" : "Зарегистрироваться",
-                font, fieldWidth, fieldHeight);
+        for (Node node : this.form.getChildren()) {
+            if (node instanceof Control) {
+                Control control = (Control) node;
+                control.setMaxWidth(fieldWidth);
+                control.setMinHeight(fieldHeight);
+                if (control instanceof TextInputControl) {
+                    ((TextInputControl) control).setFont(font);
+                } else if (control instanceof Button) {
+                    ((Button) control).setFont(font);
+                }
+            } else if (node instanceof Text) {
+                Text text = (Text) node;
+                if (text == this.header) {
+                    text.setFont(headerFont);
+                    continue;
+                }
+                text.setFont(font);
+            }
+        }
+
+        this.currentScreen = screenType;
+    }
+
+    private void initFields() {
+        Font font = StyleUtils.createFont();
+
+        this.form = new VBox();
+        ObservableList<Node> child = this.form.getChildren();
+        this.form.setBackground(Environment.PANELS_BACKGROUND);
+        this.form.setAlignment(Pos.CENTER);
+
+        this.header = StyleUtils.createText(null);
+        this.errorText = StyleUtils.createText(null, font, Color.RED);
+        this.errorText.setTextAlignment(TextAlignment.CENTER);
+
+        this.usernameField = StyleUtils.createTextField(null, "Логин", font, 0, 0);
+        this.passwordField = StyleUtils.createPasswordField(null, "Пароль", font, 0, 0);
+        this.passwordRepeatField = StyleUtils.createPasswordField(null, "Повтор пароля", font, 0, 0);
+        this.submitButton = StyleUtils.createButton(null, font, 0, 0);
         submitButton.setOnAction((e) -> this.controller.onSubmitClick());
 
-        Text changeScreen = StyleUtils.createText(screenType == ScreenType.LOGIN ? "Регистрация" : "Вход", font,
-                Environment.BUTTONS_COLOR);
-        changeScreen.setCursor(Cursor.HAND);
-        changeScreen.setOnMouseClicked((e) -> {
-            this.drawScreen(this.currentScreen == ScreenType.LOGIN ?
-                    ScreenType.REGISTER : ScreenType.LOGIN);
+        this.changeScreen = StyleUtils.createText(null, font, Environment.BUTTONS_COLOR);
+        this.changeScreen.setCursor(Cursor.HAND);
+        this.changeScreen.setOnMouseClicked((e) -> {
+            this.drawScreen(this.currentScreen == ScreenType.LOGIN ? ScreenType.REGISTER : ScreenType.LOGIN);
             this.errorText.setText("");
         });
+        this.form.getChildren().addAll(this.header, this.usernameField, this.passwordField, this.submitButton,
+                this.changeScreen, this.errorText);
+        super.setCenter(this.form);
+    }
 
-        child.addAll(text, this.usernameField, this.passwordField);
-        if (screenType == ScreenType.REGISTER) {
-            this.passwordRepeatField = StyleUtils.createPasswordField(this.getRepeatPasswordText(), "Повтор пароля",
-                    font, fieldWidth, fieldHeight);
-            child.add(this.passwordRepeatField);
-        }
-        child.addAll(submitButton, changeScreen, this.errorText);
-
-        super.setCenter(form);
-        this.currentScreen = screenType;
+    @Override
+    public void redraw() {
+        this.drawScreen(this.currentScreen);
     }
 
     public void setErrorText(String text) {
@@ -108,11 +145,6 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
 
     public ScreenType getCurrentScreen() {
         return this.currentScreen;
-    }
-
-    @Override
-    public void redraw() {
-        this.drawScreen(this.currentScreen);
     }
 
 }
