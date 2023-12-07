@@ -123,23 +123,14 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
     }
 
     public String getNameText() {
-        if (this.usernameField == null) {
-            return null;
-        }
         return this.usernameField.getText();
     }
 
     public String getPasswordText() {
-        if (this.passwordField == null) {
-            return null;
-        }
         return this.passwordField.getText();
     }
 
     public String getRepeatPasswordText() {
-        if (this.passwordRepeatField == null) {
-            return null;
-        }
         return this.passwordRepeatField.getText();
     }
 
