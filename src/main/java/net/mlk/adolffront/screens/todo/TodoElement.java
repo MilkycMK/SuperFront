@@ -1,14 +1,16 @@
 package net.mlk.adolffront.screens.todo;
 
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
+import net.mlk.adolffront.utils.IResizable;
 import net.mlk.jmson.annotations.JsonField;
 import net.mlk.jmson.utils.JsonConvertible;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class TodoElement extends HBox implements JsonConvertible {
-    private int id;
+public class TodoElement extends BorderPane implements JsonConvertible, IResizable {
+    private static final int TOPIC_LENGTH = 128;
+    private int id = -1;
     private String topic;
     private String description;
     @JsonField(key = "creation_time")
@@ -17,7 +19,13 @@ public class TodoElement extends HBox implements JsonConvertible {
     private LocalDateTime taskTime;
     private ArrayList<TodoFile> files;
 
-    public TodoElement() { }
+    public TodoElement() {
+        this.drawElement();
+    }
+
+    public void drawElement() {
+
+    }
 
     public String getTopic() {
         return this.topic;
@@ -51,6 +59,15 @@ public class TodoElement extends HBox implements JsonConvertible {
 
     public ArrayList<TodoFile> getFiles() {
         return this.files;
+    }
+
+    public int getElementId() {
+        return this.id;
+    }
+
+    @Override
+    public void redraw() {
+        this.drawElement();
     }
 
     public static class TodoFile implements JsonConvertible {
