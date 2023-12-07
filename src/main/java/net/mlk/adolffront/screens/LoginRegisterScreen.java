@@ -31,7 +31,7 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
 
     public LoginRegisterScreen() {
         this.controller = new LoginRegisterController(this);
-        this.initFields();
+        this.initNodes();
         this.drawScreen(ScreenType.LOGIN);
     }
 
@@ -84,7 +84,7 @@ public class LoginRegisterScreen extends BorderPane implements IResizable {
         this.currentScreen = screenType;
     }
 
-    private void initFields() {
+    private void initNodes() {
         Font font = StyleUtils.createFont();
 
         this.form = new VBox();
