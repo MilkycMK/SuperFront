@@ -77,6 +77,9 @@ public class StyleUtils {
         newField.setBackground(Environment.TEXTFIELD_BACKGROUND);
         newField.setFont(font);
         newField.setMaxWidth(width);
+        newField.setMaxHeight(height);
+        newField.setPrefHeight(height);
+        newField.setPrefWidth(width);
         newField.setMinWidth(width);
         newField.setMinHeight(height);
         setTextColor(newField, "white");
