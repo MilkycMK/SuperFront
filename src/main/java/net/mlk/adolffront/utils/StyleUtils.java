@@ -15,7 +15,17 @@ public class StyleUtils {
 
     public static void setTextColor(Node node, Color color) {
         String hex = toHexString(color);
-        node.setStyle(node.getStyle() + String.format("-fx-text-fill: %s; -fx-text-inner-color: %s;", hex, hex));
+        node.setStyle(node.getStyle() + String.format("-fx-text-fill: %s; " +
+                "-fx-text-inner-color: %s; -fx-prompt-text-fill: %s;", hex, hex, hex));
+    }
+
+    public static void setBackground(Node node, Color color) {
+        String hexColor = toHexString(color);
+        node.setStyle(node.getStyle() + String.format("-fx-control-inner-background: %s; " +
+                "-fx-background: %s; " +
+                "-fx-background-color: transparent;" +
+                "-fx-focus-color: transparent;" +
+                "-fx-faint-focus-color: transparent;", hexColor, hexColor));
     }
 
 }

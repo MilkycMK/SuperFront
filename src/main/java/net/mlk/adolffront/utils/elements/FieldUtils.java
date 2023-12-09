@@ -1,6 +1,7 @@
 package net.mlk.adolffront.utils.elements;
 
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.Background;
@@ -35,10 +36,20 @@ public class FieldUtils {
         return newField;
     }
 
+    public static TextArea createTextArea(String defaultText, String placeholder, Font font, Color color) {
+        TextArea textArea = new TextArea(defaultText);
+        textArea.setPromptText(placeholder);
+        textArea.setFont(font);
+        StyleUtils.setTextColor(textArea, Color.WHITE);
+        StyleUtils.setBackground(textArea, color);
+
+        return textArea;
+    }
+
     public static TextInputControl setMaxTextLength(TextInputControl field, int max) {
         field.textProperty().addListener((observableValue, string, t1) -> {
             if (field.getText().length() > max) {
-                field.setText(field.getText(0, max));
+                field.setText(string);
             }
         });
         return field;

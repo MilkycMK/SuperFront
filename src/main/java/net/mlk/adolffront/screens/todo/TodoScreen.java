@@ -46,6 +46,7 @@ public class TodoScreen extends AbstractMenuElement {
             if (this.currentTodo == null || this.currentTodo.getElementId() != -1) {
                 this.currentTodo = this.controller.createTodo();
                 this.todoElements.add(this.currentTodo);
+                this.drawScreen();
             }
         });
 
@@ -60,6 +61,7 @@ public class TodoScreen extends AbstractMenuElement {
 
     public void openTodo(TodoElement element) {
         this.currentTodo = element;
+        this.currentTodo.drawElement();
         super.setCenter(this.currentTodo);
     }
 
