@@ -37,8 +37,8 @@ public class MenuScreen extends BorderPane {
                 background = Environment.BACKGROUND;
             }
             Button button = ButtonUtils.createButton(element.getName(), font, background);
-            button.minWidthProperty().bind(menu.widthProperty().divide(this.elements.size()));
-            button.minHeightProperty().bind(menu.heightProperty());
+            button.prefWidthProperty().bind(menu.widthProperty().divide(this.elements.size()));
+            button.maxHeightProperty().bind(menu.heightProperty());
             button.setOnMouseClicked((e) -> {
                 if (element == this.currentElement) {
                     return;
