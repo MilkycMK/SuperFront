@@ -5,6 +5,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public abstract class Environment {
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
@@ -16,6 +17,7 @@ public abstract class Environment {
     public static double width = 800;
     public static double height = 600;
     public static final double ROUND = 30;
+    public static final Font defaultFont = FontUtils.createFont();
 
     public static final Color BACKGROUND_COLOR = Color.rgb(24, 24, 24, 1.0);
     public static final Color PANELS_COLOR = Color.rgb(33, 33, 33, 1.0);
