@@ -8,14 +8,10 @@ public class TodoController {
     }
 
     public TodoElement createTodo() {
-        TodoElement element = new TodoElement(this);
+        TodoElement element = new TodoElement();
         this.screen.openTodo(element);
 
         return element;
-    }
-
-    public int postTodo(TodoElement todo) {
-        return -1;
     }
 
 }

@@ -11,23 +11,26 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.elements.DateTimePicker;
+import net.mlk.adolffront.http.AdolfServer;
 import net.mlk.adolffront.utils.StyleUtils;
 import net.mlk.adolffront.utils.elements.ButtonUtils;
 import net.mlk.adolffront.utils.elements.FieldUtils;
 import net.mlk.adolffront.utils.elements.FontUtils;
+import net.mlk.jmson.annotations.JsonField;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TodoElement extends VBox {
-    private final TodoController controller;
     private int id = -1;
     private String topic;
     private String description;
+    @JsonField(key = "creation_time")
+    private LocalDateTime creationTime;
+    @JsonField(key = "task_time")
     private LocalDateTime taskTime;
-
-    public TodoElement(TodoController controller) {
-        this.controller = controller;
-    }
+    private final List<TodoFile> files = new ArrayList<>();
 
     public void drawElement() {
         super.setPadding(new Insets(0, Environment.width / 20, 0, Environment.width / 20));
@@ -67,7 +70,7 @@ public class TodoElement extends VBox {
             this.topic = topic.getText();
             this.description = description.getText();
             this.taskTime = time.getDateTimeValue();
-            this.id = this.controller.postTodo(this);
+            this.id = AdolfServer.postTodo(this);
         });
 
         control.getChildren().addAll(time, delete, save);

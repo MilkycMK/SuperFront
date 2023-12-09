@@ -1,6 +1,7 @@
 package net.mlk.adolffront.http;
 
 import net.mlk.adolffront.Environment;
+import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.jmson.Json;
 
 import java.io.IOException;
@@ -19,6 +20,10 @@ public class AdolfServer {
                 .append("login", login)
                 .append("password", password);
         return makeRequest(Environment.REGISTER, HttpMethod.POST, json);
+    }
+
+    public static int postTodo(TodoElement todo) {
+        return -1;
     }
 
     public static void makeLogoutRequest() throws IOException {
