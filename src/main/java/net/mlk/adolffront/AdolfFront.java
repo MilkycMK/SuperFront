@@ -19,8 +19,8 @@ public class AdolfFront extends Application {
         stage.getIcons().add(new Image(AdolfFront.class.getResourceAsStream("/assets/logo.png")));
         stage.setTitle("AdolfFront");
         Scene scene = new Scene(new LoginRegisterScreen(), Environment.width, Environment.height);
-        stage.setScene(scene);
         scene.setFill(Environment.BACKGROUND_COLOR);
+        stage.setScene(scene);
         stage.show();
     }
 
