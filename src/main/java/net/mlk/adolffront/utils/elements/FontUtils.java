@@ -1,4 +1,4 @@
-package net.mlk.adolffront.utils;
+package net.mlk.adolffront.utils.elements;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
