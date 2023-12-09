@@ -17,7 +17,6 @@ public abstract class Environment {
     public static double width = 800;
     public static double height = 600;
     public static final double ROUND = 30;
-    public static final Font defaultFont = FontUtils.createFont();
 
     public static final Color BACKGROUND_COLOR = Color.rgb(24, 24, 24, 1.0);
     public static final Color PANELS_COLOR = Color.rgb(33, 33, 33, 1.0);
