@@ -9,6 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.login.LoginRegisterScreen;
+import net.mlk.adolffront.screens.menu.MenuScreen;
+import net.mlk.adolffront.screens.todo.TodoScreen;
 import net.mlk.jmson.Json;
 
 import java.io.File;
@@ -42,11 +44,17 @@ public class AdolfFront extends Application {
     }
 
     public static void loadUserProfile(File file) {
-        Json json = new Json(file);
-        Environment.name = json.getString("name");
-        Environment.token = json.getString("token");
+        try {
+            Json json = new Json(file);
+            Environment.name = json.getString("name");
+            Environment.token = json.getString("token");
 
-        setScreen(new BorderPane());
+            MenuScreen screen = new MenuScreen();
+            screen.addElements(new TodoScreen(), new TodoScreen(), new TodoScreen());
+            setScreen(screen);
+        } catch (Exception e) {
+            setScreen(new LoginRegisterScreen());
+        }
     }
 
     public static void deleteUserProfile() {
