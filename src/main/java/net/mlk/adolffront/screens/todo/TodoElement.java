@@ -40,7 +40,7 @@ public class TodoElement extends VBox implements JsonConvertible {
     private String topic;
     private String description;
     @JsonIgnore
-    @JsonField(key = "creation_time")
+    @JsonField(key = "creation_time", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationTime;
     @JsonField(key = "task_time", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime taskTime;
@@ -52,6 +52,7 @@ public class TodoElement extends VBox implements JsonConvertible {
     private HBox filesField;
 
     public void drawElement() {
+        super.getChildren().clear();
         super.setPadding(new Insets(0, Environment.width / 20, 0, Environment.width / 20));
         super.spacingProperty().bind(super.heightProperty().multiply(0.01));
         Font topicFont = FontUtils.createFont(FontWeight.BOLD, 20);
@@ -59,13 +60,13 @@ public class TodoElement extends VBox implements JsonConvertible {
 
         Text err = TextUtils.createText(null, font, Color.RED);
 
-        TextArea topic = FieldUtils.createTextArea(null, "Заголовок", topicFont, Color.TRANSPARENT);
+        TextArea topic = FieldUtils.createTextArea(this.topic, "Заголовок", topicFont, Color.TRANSPARENT);
         topic.setWrapText(true);
         FieldUtils.setMaxTextLength(topic, 128);
         topic.prefWidthProperty().bind(super.widthProperty().multiply(0.8));
         topic.prefHeightProperty().bind(super.heightProperty().multiply(0.25));
 
-        TextArea description = FieldUtils.createTextArea(null, "Описание", font, Color.TRANSPARENT);
+        TextArea description = FieldUtils.createTextArea(this.description, "Описание", font, Color.TRANSPARENT);
         description.setWrapText(true);
         FieldUtils.setMaxTextLength(description, 3000);
         description.prefWidthProperty().bind(super.widthProperty().multiply(0.8));
@@ -75,6 +76,11 @@ public class TodoElement extends VBox implements JsonConvertible {
         control.spacingProperty().bind(super.widthProperty().multiply(0.05));
 
         DateTimePicker time = new DateTimePicker();
+        if (this.taskTime != null) {
+            time.setDateTimeValue(this.taskTime);
+        } else {
+            time.setDateTimeValue(LocalDateTime.now());
+        }
         time.prefWidthProperty().bind(super.widthProperty().multiply(0.35));
         time.minHeightProperty().bind(super.heightProperty().multiply(0.08));
         StyleUtils.setBackground(time, Environment.PANELS_COLOR);
@@ -86,6 +92,7 @@ public class TodoElement extends VBox implements JsonConvertible {
         delete.setOnMouseClicked((a) -> {
             try {
                 AdolfServer.deleteTodo(this.id);
+                AdolfFront.getTodoScreen().deleteTodo(this);
             } catch (IOException e) {
                 err.setText("Ошибка соединения.");
             }
@@ -98,6 +105,7 @@ public class TodoElement extends VBox implements JsonConvertible {
             err.setText(null);
             this.topic = topic.getText();
             this.description = description.getText();
+            this.creationTime = LocalDateTime.now();
             this.taskTime = time.getDateTimeValue();
             if (this.topic == null) {
                 err.setText("Заголовок не может быть пустым.");
@@ -105,6 +113,8 @@ public class TodoElement extends VBox implements JsonConvertible {
             }
             try {
                 this.id = AdolfServer.postTodo(this);
+                AdolfFront.getTodoScreen().drawScreen();
+                delete.setVisible(true);
             } catch (IOException ex) {
                 err.setText("Ошибка соединения.");
             }
@@ -140,16 +150,21 @@ public class TodoElement extends VBox implements JsonConvertible {
                     err.setText("Файл уже существует.");
                     return;
                 }
-                this.addFile(file);
+                TodoFile fil = new TodoFile(file);
+                this.addFile(fil);
+                this.files.add(fil);
             }
         });
+        for (TodoFile file : this.files) {
+            this.addFile(file);
+        }
         this.filesField.getChildren().add(plus);
 
         super.getChildren().addAll(topic, description, control, err, this.filesField);
         Platform.runLater(super::requestFocus);
     }
 
-    public void addFile(File file) {
+    public void addFile(TodoFile file) {
         HBox part = new HBox();
         part.spacingProperty().bind(this.filesField.widthProperty().multiply(0.009));
         part.setBackground(Environment.PANELS_BACKGROUND);
@@ -166,12 +181,10 @@ public class TodoElement extends VBox implements JsonConvertible {
         if (child.size() >= 6) {
             child.get(child.size() - 1).setVisible(false);
         }
-        TodoFile todoFile = new TodoFile(file);
-        this.files.add(todoFile);
         delete.setOnMouseClicked((e) -> {
             child.remove(part);
-            this.files.remove(todoFile);
-            this.deletedFiles.add(todoFile);
+            this.files.remove(file);
+            this.deletedFiles.add(file);
             child.get(child.size() - 1).setVisible(true);
         });
     }
@@ -201,6 +214,14 @@ public class TodoElement extends VBox implements JsonConvertible {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public LocalDateTime getCreationTime() {
+        return this.creationTime;
+    }
+
+    public LocalDateTime getTaskTime() {
+        return this.taskTime;
     }
 
 }

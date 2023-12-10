@@ -17,6 +17,7 @@ import java.io.File;
 
 public class AdolfFront extends Application {
     private static Stage stage;
+    private static TodoScreen todoScreen;
 
     public static void main(String[] args) {
         launch();
@@ -40,7 +41,6 @@ public class AdolfFront extends Application {
 
     public static void setScreen(Pane screen) {
         stage.setScene(new Scene(screen, Environment.width, Environment.height));
-        System.out.println(screen);
         stage.getScene().addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
         screen.setBackground(Environment.BACKGROUND);
     }
@@ -52,7 +52,8 @@ public class AdolfFront extends Application {
             Environment.token = json.getString("token");
 
             MenuScreen screen = new MenuScreen();
-            screen.addElements(new TodoScreen(), new TodoScreen(), new TodoScreen());
+            todoScreen = new TodoScreen();
+            screen.addElements(todoScreen, new TodoScreen(), new TodoScreen());
             setScreen(screen);
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,6 +71,10 @@ public class AdolfFront extends Application {
 
     public static Stage getStage() {
         return AdolfFront.stage;
+    }
+
+    public static TodoScreen getTodoScreen() {
+        return todoScreen;
     }
 
 }

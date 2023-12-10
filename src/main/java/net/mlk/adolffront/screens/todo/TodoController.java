@@ -13,4 +13,8 @@ public class TodoController {
         return element;
     }
 
+    public TodoScreen getScreen() {
+        return this.screen;
+    }
+
 }

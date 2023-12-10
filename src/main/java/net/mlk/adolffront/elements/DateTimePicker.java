@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class DateTimePicker extends DatePicker {
     public static final String DefaultFormat = "yyyy-MM-dd HH:mm:ss";
 
-    private DateTimeFormatter formatter;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DefaultFormat);
     private final ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(LocalDateTime.now());
     private final ObjectProperty<String> format = new SimpleObjectProperty<String>() {
         public void set(String newValue) {
