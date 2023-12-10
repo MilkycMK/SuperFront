@@ -10,7 +10,6 @@ public class TodoController {
     public TodoElement createTodo() {
         TodoElement element = new TodoElement();
         this.screen.openTodo(element);
-
         return element;
     }
 

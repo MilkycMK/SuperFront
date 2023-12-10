@@ -1,5 +1,6 @@
 package net.mlk.adolffront.screens.todo;
 
+import net.mlk.jmson.annotations.JsonIgnore;
 import net.mlk.jmson.utils.JsonConvertible;
 
 import java.io.File;

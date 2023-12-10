@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 public class TextUtils {
 
     public static Text createText(String content) {
-        return createText(content, FontUtils.createFont(15));
+        return createText(content, FontUtils.createFont());
     }
 
     public static Text createText(String content, Font font) {

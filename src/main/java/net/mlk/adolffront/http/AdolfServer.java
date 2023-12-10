@@ -3,6 +3,7 @@ package net.mlk.adolffront.http;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.jmson.Json;
+import net.mlk.jmson.utils.JsonConverter;
 
 import java.io.IOException;
 
@@ -23,6 +24,8 @@ public class AdolfServer {
     }
 
     public static int postTodo(TodoElement todo) {
+        Json json = JsonConverter.convertToJson(todo);
+        System.out.println(json);
         return -1;
     }
 

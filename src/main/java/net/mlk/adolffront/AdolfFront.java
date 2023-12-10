@@ -25,6 +25,7 @@ public class AdolfFront extends Application {
     @Override
     public void start(Stage stage) {
         AdolfFront.stage = stage;
+        stage.setResizable(false);
         stage.getIcons().add(new Image(AdolfFront.class.getResourceAsStream("/assets/logo.png")));
         stage.setTitle("AdolfFront");
 
