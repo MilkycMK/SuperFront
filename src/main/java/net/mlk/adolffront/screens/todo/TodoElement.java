@@ -46,6 +46,8 @@ public class TodoElement extends VBox implements JsonConvertible {
     @JsonIgnore
     private final List<TodoFile> files = new ArrayList<>();
     @JsonIgnore
+    private final List<TodoFile> deletedFiles = new ArrayList<>();
+    @JsonIgnore
     private HBox filesField;
 
     public void drawElement() {
@@ -125,6 +127,13 @@ public class TodoElement extends VBox implements JsonConvertible {
         if (child.size() >= 6) {
             child.get(child.size() - 1).setVisible(false);
         }
+        TodoFile todoFile = new TodoFile(file);
+        this.files.add(todoFile);
+        delete.setOnMouseClicked((e) -> {
+            child.remove(part);
+            this.files.remove(todoFile);
+            this.deletedFiles.add(todoFile);
+        });
     }
 
     public static String cropString(String str, int size) {
