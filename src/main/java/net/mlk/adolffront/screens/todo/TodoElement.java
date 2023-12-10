@@ -115,6 +115,7 @@ public class TodoElement extends VBox implements JsonConvertible {
         part.setPadding(new Insets(5, 15, 5, 15));
         Text name = TextUtils.createText(cropString(file.getName(), 3), FontUtils.createFont());
         Text delete = TextUtils.createText("-", FontUtils.createFont(20), Color.RED);
+        delete.setCursor(Cursor.HAND);
         delete.setTranslateY(-3);
         name.setTranslateY(1);
         part.getChildren().addAll(name, delete);
