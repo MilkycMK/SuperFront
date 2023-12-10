@@ -9,7 +9,7 @@ public class TodoFile implements JsonConvertible {
     private String name;
     private File file;
 
-    protected TodoFile() {
+    public TodoFile() {
 
     }
 

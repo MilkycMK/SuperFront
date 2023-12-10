@@ -40,6 +40,7 @@ public class AdolfFront extends Application {
 
     public static void setScreen(Pane screen) {
         stage.setScene(new Scene(screen, Environment.width, Environment.height));
+        System.out.println(screen);
         stage.getScene().addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
         screen.setBackground(Environment.BACKGROUND);
     }
@@ -54,6 +55,7 @@ public class AdolfFront extends Application {
             screen.addElements(new TodoScreen(), new TodoScreen(), new TodoScreen());
             setScreen(screen);
         } catch (Exception e) {
+            e.printStackTrace();
             setScreen(new LoginRegisterScreen());
         }
     }

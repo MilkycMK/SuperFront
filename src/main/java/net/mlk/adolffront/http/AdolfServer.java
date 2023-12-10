@@ -1,12 +1,16 @@
 package net.mlk.adolffront.http;
 
+import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.adolffront.screens.todo.TodoFile;
 import net.mlk.jmson.Json;
+import net.mlk.jmson.JsonList;
 import net.mlk.jmson.utils.JsonConverter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdolfServer {
@@ -33,7 +37,21 @@ public class AdolfServer {
                         .map(TodoFile::getFile)
                         .collect(Collectors.toList()));
         MultiPartRequest.Response response = makeTokenRequest(request);
-        return -1;
+        return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[2]);
+    }
+
+    public static MultiPartRequest.Response deleteTodo(int id) throws IOException {
+        return makeTokenRequest(Environment.TODO + "/" + id, HttpMethod.DELETE, new Json());
+    }
+
+    public static List<TodoElement> getTodo() throws IOException {
+        List<TodoElement> elements = new ArrayList<>();
+        MultiPartRequest.Response response = makeTokenRequest(Environment.TODO, HttpMethod.GET, new Json());
+        JsonList list = new JsonList(response.getResponse());
+        for (Json json : list.getListWithJsons()) {
+            elements.add(JsonConverter.convertToObject(json, TodoElement.class));
+        }
+        return elements;
     }
 
     public static void makeLogoutRequest() throws IOException {
@@ -42,15 +60,16 @@ public class AdolfServer {
 
     public static MultiPartRequest.Response makeTokenRequest(String url, HttpMethod method, Json json) throws IOException {
         MultiPartRequest request = new MultiPartRequest(url, method)
-                .setRequestHeader("Authorization", Environment.token)
                 .addJsonData(json);
         return makeTokenRequest(request);
     }
 
     public static MultiPartRequest.Response makeTokenRequest(MultiPartRequest request) throws IOException {
-        MultiPartRequest.Response response = request.send();
+        MultiPartRequest.Response response = request
+                .setRequestHeader("Authorization", Environment.token)
+                .send();
         if (response.getResponseCode() == 401) {
-//            AdolfFront.deleteUserProfile();
+            AdolfFront.deleteUserProfile();
             return null;
         }
         return response;

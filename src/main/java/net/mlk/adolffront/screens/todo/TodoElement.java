@@ -42,7 +42,7 @@ public class TodoElement extends VBox implements JsonConvertible {
     @JsonIgnore
     @JsonField(key = "creation_time")
     private LocalDateTime creationTime;
-    @JsonField(key = "task_time")
+    @JsonField(key = "task_time", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime taskTime;
     @JsonIgnore
     private final List<TodoFile> files = new ArrayList<>();
@@ -83,6 +83,13 @@ public class TodoElement extends VBox implements JsonConvertible {
         delete.prefWidthProperty().bind(super.widthProperty().multiply(0.25));
         delete.minHeightProperty().bind(super.heightProperty().multiply(0.08));
         delete.setVisible(this.id != -1);
+        delete.setOnMouseClicked((a) -> {
+            try {
+                AdolfServer.deleteTodo(this.id);
+            } catch (IOException e) {
+                err.setText("Ошибка соединения.");
+            }
+        });
 
         Button save = ButtonUtils.createButton("Сохранить", font);
         save.prefWidthProperty().bind(super.widthProperty().multiply(0.25));
