@@ -2,10 +2,12 @@ package net.mlk.adolffront.http;
 
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.screens.todo.TodoElement;
+import net.mlk.adolffront.screens.todo.TodoFile;
 import net.mlk.jmson.Json;
 import net.mlk.jmson.utils.JsonConverter;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class AdolfServer {
 
@@ -23,9 +25,14 @@ public class AdolfServer {
         return makeRequest(Environment.REGISTER, HttpMethod.POST, json);
     }
 
-    public static int postTodo(TodoElement todo) {
+    public static int postTodo(TodoElement todo) throws IOException {
         Json json = JsonConverter.convertToJson(todo);
-        System.out.println(json);
+        MultiPartRequest request = new MultiPartRequest(Environment.TODO, HttpMethod.POST)
+                .addJsonData(json)
+                .addFiles("files", todo.getFiles().stream()
+                        .map(TodoFile::getFile)
+                        .collect(Collectors.toList()));
+        MultiPartRequest.Response response = makeTokenRequest(request);
         return -1;
     }
 

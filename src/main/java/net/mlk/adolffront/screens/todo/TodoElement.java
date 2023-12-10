@@ -29,6 +29,7 @@ import net.mlk.jmson.annotations.JsonIgnore;
 import net.mlk.jmson.utils.JsonConvertible;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,8 @@ public class TodoElement extends VBox implements JsonConvertible {
         super.spacingProperty().bind(super.heightProperty().multiply(0.01));
         Font topicFont = FontUtils.createFont(FontWeight.BOLD, 20);
         Font font = FontUtils.createFont();
+
+        Text err = TextUtils.createText(null, font, Color.RED);
 
         TextArea topic = FieldUtils.createTextArea(null, "Заголовок", topicFont, Color.TRANSPARENT);
         topic.setWrapText(true);
@@ -85,14 +88,21 @@ public class TodoElement extends VBox implements JsonConvertible {
         save.prefWidthProperty().bind(super.widthProperty().multiply(0.25));
         save.minHeightProperty().bind(super.heightProperty().multiply(0.08));
         save.setOnMouseClicked((e) -> {
+            err.setText(null);
             this.topic = topic.getText();
             this.description = description.getText();
             this.taskTime = time.getDateTimeValue();
-            this.id = AdolfServer.postTodo(this);
+            if (this.topic == null) {
+                err.setText("Заголовок не может быть пустым.");
+                return;
+            }
+            try {
+                this.id = AdolfServer.postTodo(this);
+            } catch (IOException ex) {
+                err.setText("Ошибка соединения.");
+            }
         });
         control.getChildren().addAll(time, delete, save);
-        Text err = TextUtils.createText(null, font, Color.RED);
-        err.setVisible(false);
 
         this.filesField = new HBox();
         this.filesField.setAlignment(Pos.CENTER_LEFT);
@@ -100,6 +110,7 @@ public class TodoElement extends VBox implements JsonConvertible {
         Text plus = TextUtils.createText("+", FontUtils.createFont(20));
         plus.setCursor(Cursor.HAND);
         plus.setOnMouseClicked((e) -> {
+            err.setText(null);
             FileChooser chooser = new FileChooser();
             File file = chooser.showOpenDialog(AdolfFront.getStage());
             if (file != null) {
@@ -171,6 +182,18 @@ public class TodoElement extends VBox implements JsonConvertible {
 
     public int getElementId() {
         return this.id;
+    }
+
+    public List<TodoFile> getFiles() {
+        return this.files;
+    }
+
+    public String getTopic() {
+        return this.topic;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
 }
