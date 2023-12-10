@@ -52,7 +52,7 @@ public class TodoElement extends VBox implements JsonConvertible {
 
     public void drawElement() {
         super.setPadding(new Insets(0, Environment.width / 20, 0, Environment.width / 20));
-        super.spacingProperty().bind(super.heightProperty().multiply(0.05));
+        super.spacingProperty().bind(super.heightProperty().multiply(0.01));
         Font topicFont = FontUtils.createFont(FontWeight.BOLD, 20);
         Font font = FontUtils.createFont();
 
@@ -91,6 +91,8 @@ public class TodoElement extends VBox implements JsonConvertible {
             this.id = AdolfServer.postTodo(this);
         });
         control.getChildren().addAll(time, delete, save);
+        Text err = TextUtils.createText(null, font, Color.RED);
+        err.setVisible(false);
 
         this.filesField = new HBox();
         this.filesField.setAlignment(Pos.CENTER_LEFT);
@@ -101,12 +103,31 @@ public class TodoElement extends VBox implements JsonConvertible {
             FileChooser chooser = new FileChooser();
             File file = chooser.showOpenDialog(AdolfFront.getStage());
             if (file != null) {
+                long size = 0;
+                int fileCount = 0;
+                for (TodoFile f : this.files) {
+                    size += f.getFile().length();
+                    if (f.getName().equals(file.getName())) {
+                        fileCount++;
+                    }
+                }
+
+                if (size > 10 * 1024 * 1024) {
+                    err.setVisible(true);
+                    err.setText("Общий размер файлов не должен превышать 10мб");
+                    return;
+                }
+                else if (fileCount != 0) {
+                    err.setVisible(true);
+                    err.setText("Файл уже существует.");
+                    return;
+                }
                 this.addFile(file);
             }
         });
         this.filesField.getChildren().add(plus);
 
-        super.getChildren().addAll(topic, description, control, this.filesField);
+        super.getChildren().addAll(topic, description, control, err, this.filesField);
         Platform.runLater(super::requestFocus);
     }
 
@@ -133,10 +154,11 @@ public class TodoElement extends VBox implements JsonConvertible {
             child.remove(part);
             this.files.remove(todoFile);
             this.deletedFiles.add(todoFile);
+            child.get(child.size() - 1).setVisible(true);
         });
     }
 
-    public static String cropString(String str, int size) {
+    private static String cropString(String str, int size) {
         int strSize = str.length();
 
         if (strSize <= size) {

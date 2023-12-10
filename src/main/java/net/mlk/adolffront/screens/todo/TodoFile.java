@@ -26,4 +26,8 @@ public class TodoFile implements JsonConvertible {
     public String getName() {
         return this.name;
     }
+
+    public File getFile() {
+        return this.file;
+    }
 }
