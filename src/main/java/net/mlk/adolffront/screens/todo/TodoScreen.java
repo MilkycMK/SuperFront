@@ -56,6 +56,7 @@ public class TodoScreen extends AbstractMenuElement {
         if (this.todoElements.isEmpty()) {
             this.updateTodos();
         }
+        super.getErrorText().translateXProperty().bind(super.widthProperty().multiply(0.5));
         this.drawLeftMenu();
         this.drawTodoList();
         this.leftPanel.getChildren().add(this.todoScroll);
@@ -153,9 +154,10 @@ public class TodoScreen extends AbstractMenuElement {
         save.minHeightProperty().bind(super.heightProperty().multiply(0.08));
         save.setOnMouseClicked((e) -> {
             if (topic.getText() == null || topic.getText().isEmpty()) {
-                this.setErrorText("Заголовок не может быть пустым.");
+                super.setErrorText("Заголовок не может быть пустым.");
                 return;
             }
+            super.setErrorText("");
             element.setTopic(topic.getText());
             element.setDescription(description.getText());
             element.setTaskTime(time.getDateTimeValue());
@@ -289,7 +291,7 @@ public class TodoScreen extends AbstractMenuElement {
         try {
             this.todoElements = AdolfServer.getTodo();
         } catch (IOException ex) {
-            this.setErrorText("Ошибка сети.");
+            super.setErrorText("Ошибка сети.");
         }
     }
 
