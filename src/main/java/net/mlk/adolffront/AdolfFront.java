@@ -5,7 +5,6 @@ import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.mlk.adolffront.screens.login.LoginRegisterScreen;
@@ -17,7 +16,6 @@ import java.io.File;
 
 public class AdolfFront extends Application {
     private static Stage stage;
-    private static TodoScreen todoScreen;
 
     public static void main(String[] args) {
         launch();
@@ -52,8 +50,7 @@ public class AdolfFront extends Application {
             Environment.token = json.getString("token");
 
             MenuScreen screen = new MenuScreen();
-            todoScreen = new TodoScreen();
-            screen.addElements(todoScreen, new TodoScreen(), new TodoScreen());
+            screen.addElements(new TodoScreen(), new TodoScreen(), new TodoScreen());
             setScreen(screen);
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,10 +68,6 @@ public class AdolfFront extends Application {
 
     public static Stage getStage() {
         return AdolfFront.stage;
-    }
-
-    public static TodoScreen getTodoScreen() {
-        return todoScreen;
     }
 
 }

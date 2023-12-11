@@ -10,7 +10,9 @@ import net.mlk.jmson.utils.JsonConverter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AdolfServer {
@@ -39,13 +41,13 @@ public class AdolfServer {
         MultiPartRequest.Response response = makeTokenRequest(request);
         return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[2]);
     }
-
+//
     public static MultiPartRequest.Response deleteTodo(int id) throws IOException {
         return makeTokenRequest(Environment.TODO + "/" + id, HttpMethod.DELETE, new Json());
     }
-
-    public static List<TodoElement> getTodo() throws IOException {
-        List<TodoElement> elements = new ArrayList<>();
+//
+    public static Set<TodoElement> getTodo() throws IOException {
+        Set<TodoElement> elements = new HashSet<>();
         MultiPartRequest.Response response = makeTokenRequest(Environment.TODO, HttpMethod.GET, new Json());
         JsonList list = new JsonList(response.getResponse());
         for (Json json : list.getListWithJsons()) {
@@ -53,6 +55,13 @@ public class AdolfServer {
         }
         return elements;
     }
+//
+//    public static void saveFile(int todoId, TodoFile file, String folder) throws IOException {
+//        MultiPartRequest.Response response = makeTokenRequest(Environment.getTodoFileUrl(todoId, file.getId()),
+//                HttpMethod.GET, new Json());
+//        System.out.println(response.getResponseCode());
+//        response.saveFile(folder + "/" + file.getName());
+//    }
 
     public static void makeLogoutRequest() throws IOException {
         makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());

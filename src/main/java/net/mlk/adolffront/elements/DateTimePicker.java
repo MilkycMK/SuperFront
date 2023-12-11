@@ -24,7 +24,7 @@ public class DateTimePicker extends DatePicker {
         }
     };
 
-    public DateTimePicker() {
+    public DateTimePicker(LocalDateTime t) {
         getStyleClass().add("datetime-picker");
         setFormat(DefaultFormat);
         setConverter(new InternalConverter());
@@ -50,7 +50,7 @@ public class DateTimePicker extends DatePicker {
             if (!newValue)
                 simulateEnterPressed();
         });
-
+        this.setDateTimeValue(t);
     }
 
     private void simulateEnterPressed() {

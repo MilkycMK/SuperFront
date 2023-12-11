@@ -43,7 +43,16 @@ public abstract class Environment {
     public static final String LOGOUT = URL + "/logout";
 
     public static final String TODO = URL + "/todo";
-    public static final String TODO_ELEMENT = URL + "/todo/%s";
+    public static final String TODO_ELEMENT = TODO + "/%s";
+    public static final String TODO_FILE = TODO_ELEMENT + "/files/%s";
+
+    public static String getTodoElementUrl(int id) {
+        return String.format(TODO_ELEMENT, id);
+    }
+
+    public static String getTodoFileUrl(int id, String fileName) {
+        return String.format(TODO_FILE, id, fileName);
+    }
 
 
 }
