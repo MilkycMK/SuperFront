@@ -5,6 +5,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.utils.elements.ButtonUtils;
 import net.mlk.adolffront.utils.elements.FontUtils;

@@ -76,6 +76,10 @@ public class AdolfServer {
         response.saveFile(folder + "/" + file.getName());
     }
 
+    public static MultiPartRequest.Response getFinance() throws IOException {
+        return makeTokenRequest(Environment.FINANCE, HttpMethod.GET, new Json());
+    }
+
     public static void makeLogoutRequest() throws IOException {
         makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());
     }

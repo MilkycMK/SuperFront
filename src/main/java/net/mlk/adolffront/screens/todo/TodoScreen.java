@@ -42,7 +42,6 @@ public class TodoScreen extends AbstractMenuElement {
     private Set<TodoElement> todoElements = new HashSet<>();
     private TodoElement currentElement;
     private final TodoController controller;
-    private final Text errorText = TextUtils.createText(null, FontUtils.createFont(), Color.RED);
     private VBox leftPanel;
     private final ScrollPane todoScroll = new ScrollPane();
     private VBox currentBox;
@@ -57,7 +56,6 @@ public class TodoScreen extends AbstractMenuElement {
         if (this.todoElements.isEmpty()) {
             this.updateTodos();
         }
-        this.errorText.setTextAlignment(TextAlignment.CENTER);
         this.drawLeftMenu();
         this.drawTodoList();
         this.leftPanel.getChildren().add(this.todoScroll);
@@ -94,13 +92,13 @@ public class TodoScreen extends AbstractMenuElement {
         });
 
         buttons.getChildren().addAll(create, refresh);
-        this.leftPanel.getChildren().addAll(this.errorText, buttons);
+        this.leftPanel.getChildren().add(buttons);
         super.setLeft(this.leftPanel);
     }
 
     public void drawTodoList() {
         StyleUtils.setBackground(this.todoScroll, Environment.BACKGROUND_COLOR);
-        this.todoScroll.prefHeightProperty().bind(this.leftPanel.heightProperty().multiply(0.72));
+        this.todoScroll.prefHeightProperty().bind(this.leftPanel.heightProperty().multiply(0.77));
         VBox todos = new VBox();
         this.todoScroll.setContent(todos);
 
@@ -294,10 +292,6 @@ public class TodoScreen extends AbstractMenuElement {
         } catch (IOException ex) {
             this.setErrorText("Ошибка сети.");
         }
-    }
-
-    public void setErrorText(String text) {
-        this.errorText.setText(text);
     }
 
 }

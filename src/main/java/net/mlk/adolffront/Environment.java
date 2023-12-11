@@ -54,5 +54,7 @@ public abstract class Environment {
         return String.format(TODO_FILE, id, fileName);
     }
 
+    public static final String FINANCE = URL + "/finances";
+
 
 }
