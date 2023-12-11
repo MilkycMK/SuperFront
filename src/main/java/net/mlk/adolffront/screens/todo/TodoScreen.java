@@ -145,6 +145,7 @@ public class TodoScreen extends AbstractMenuElement {
         delete.setDisable(element.getId() == -1);
         delete.setOnMouseClicked((e) -> {
             this.controller.deleteTodo(element);
+            this.todoElements.remove(element);
             ((Pane) this.todoScroll.getContent()).getChildren().remove(this.currentBox);
             this.openTodo(null);
         });
@@ -241,7 +242,6 @@ public class TodoScreen extends AbstractMenuElement {
             if (this.currentBox != null) {
                 this.currentBox.setBackground(Environment.BACKGROUND);
             }
-            System.out.println("sadkadkls");
             this.currentBox = vBox;
             this.currentBox.setBackground(TODO_ACTIVE);
         }
@@ -275,9 +275,7 @@ public class TodoScreen extends AbstractMenuElement {
 
     public void updateTodos() {
         try {
-            System.out.println(this.todoElements);
             this.todoElements = AdolfServer.getTodo();
-            System.out.println(this.todoElements);
         } catch (IOException ex) {
             this.setErrorText("Ошибка сети.");
         }
