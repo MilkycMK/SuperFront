@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import net.mlk.adolffront.screens.finances.FinanceScreen;
+import net.mlk.adolffront.screens.group.GroupScreen;
 import net.mlk.adolffront.screens.login.LoginRegisterScreen;
 import net.mlk.adolffront.screens.menu.MenuScreen;
 import net.mlk.adolffront.screens.todo.TodoScreen;
@@ -50,7 +52,7 @@ public class AdolfFront extends Application {
             Environment.token = json.getString("token");
 
             MenuScreen screen = new MenuScreen();
-            screen.addElements(new TodoScreen(), new TodoScreen(), new TodoScreen());
+            screen.addElements(new TodoScreen(), new FinanceScreen(), new GroupScreen());
             setScreen(screen);
         } catch (Exception e) {
             e.printStackTrace();

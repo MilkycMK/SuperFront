@@ -243,6 +243,7 @@ public class TodoScreen extends AbstractMenuElement {
 
     private void addTodo(TodoElement element, boolean current) {
         VBox vBox = new VBox();
+        vBox.setCursor(Cursor.HAND);
         vBox.minHeightProperty().bind(this.todoScroll.heightProperty().multiply(0.2));
         vBox.minWidthProperty().bind(this.todoScroll.widthProperty().multiply(0.99));
         vBox.setPadding(new Insets(20));
