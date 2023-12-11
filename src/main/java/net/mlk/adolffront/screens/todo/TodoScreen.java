@@ -78,7 +78,6 @@ public class TodoScreen extends AbstractMenuElement {
         create.setOnMouseClicked((e) -> {
             if (this.currentElement == null || this.currentElement.getId() != -1) {
                 TodoElement element = new TodoElement();
-                this.todoElements.add(element);
                 this.openTodo(element);
             }
         });
