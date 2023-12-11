@@ -29,6 +29,10 @@ public class Finance implements JsonConvertible {
         return this.remain;
     }
 
+    public LocalDate getCreationDate() {
+        return this.creationDate;
+    }
+
     public LocalDate getSalaryDate() {
         return this.salaryDate;
     }
