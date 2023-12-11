@@ -27,6 +27,22 @@ public class TodoController {
         }
     }
 
+    public void saveFile(int id, TodoFile file, String folder) {
+        try {
+            AdolfServer.saveFile(id, file, folder);
+        } catch (IOException e) {
+            this.screen.setErrorText("Ошибка сети.");
+        }
+    }
+
+    public void updateTodo(TodoElement todo) {
+        try {
+            AdolfServer.updateTodo(todo);
+        } catch (IOException e) {
+            this.screen.setErrorText("Ошибка сети.");
+        }
+    }
+
     public TodoScreen getScreen() {
         return this.screen;
     }

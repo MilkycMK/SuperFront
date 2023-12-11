@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
@@ -154,9 +155,6 @@ public class TodoScreen extends AbstractMenuElement {
         save.prefWidthProperty().bind(super.widthProperty().multiply(0.25));
         save.minHeightProperty().bind(super.heightProperty().multiply(0.08));
         save.setOnMouseClicked((e) -> {
-            if (element.getId() != -1) {
-                return;
-            }
             if (topic.getText() == null || topic.getText().isEmpty()) {
                 this.setErrorText("Заголовок не может быть пустым.");
                 return;
@@ -164,6 +162,11 @@ public class TodoScreen extends AbstractMenuElement {
             element.setTopic(topic.getText());
             element.setDescription(description.getText());
             element.setTaskTime(time.getDateTimeValue());
+            if (element.getId() != -1) {
+                this.controller.updateTodo(element);
+                this.drawTodoList();
+                return;
+            }
 
             this.controller.createTodo(element);
             this.addTodo(element, true);
@@ -183,7 +186,7 @@ public class TodoScreen extends AbstractMenuElement {
             Button newFile = ButtonUtils.createButton("Новый файл", font);
             newFile.minWidthProperty().bind(filesPane.widthProperty().multiply(0.28));
             newFile.minHeightProperty().bind(filesPane.heightProperty().multiply(0.34));
-            filesPane.getChildren().add(newFile);
+            filesPane.getChildren().add(0, newFile);
             newFile.setOnMouseClicked((e) -> {
                 FileChooser chooser = new FileChooser();
                 File file = chooser.showOpenDialog(AdolfFront.getStage());
@@ -215,6 +218,17 @@ public class TodoScreen extends AbstractMenuElement {
         part.getChildren().addAll(name, deleteFile);
         HBox.setMargin(deleteFile, new Insets(-10, 0, 0, 0));
         filesPane.getChildren().add(part);
+        name.setCursor(Cursor.HAND);
+        name.setOnMouseClicked((e) -> {
+            DirectoryChooser chooser = new DirectoryChooser();
+            File f = chooser.showDialog(AdolfFront.getStage());
+            if (f == null) {
+                return;
+            }
+            if (this.currentElement.getId() != -1) {
+                this.controller.saveFile(this.currentElement.getId(), file, f.getAbsolutePath());
+            }
+        });
         deleteFile.setOnMouseClicked((e) -> {
             this.currentElement.deleteFile(file);
             filesPane.getChildren().remove(part);

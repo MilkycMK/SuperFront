@@ -41,11 +41,25 @@ public class AdolfServer {
         MultiPartRequest.Response response = makeTokenRequest(request);
         return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[2]);
     }
-//
+
     public static MultiPartRequest.Response deleteTodo(int id) throws IOException {
         return makeTokenRequest(Environment.TODO + "/" + id, HttpMethod.DELETE, new Json());
     }
-//
+
+    public static MultiPartRequest.Response updateTodo(TodoElement element) throws IOException {
+        Json json = JsonConverter.convertToJson(element);
+        MultiPartRequest.Response response = makeTokenRequest(Environment.getTodoElementUrl(element.getId()), HttpMethod.PATCH, json);
+        for (TodoFile file : element.getDeletedFiles()) {
+            MultiPartRequest.Response res= makeTokenRequest(Environment.getTodoFileUrl(element.getId(), file.getName()), HttpMethod.DELETE, new Json());
+        }
+        MultiPartRequest request = new MultiPartRequest(Environment.getTodoElementUrl(element.getId()) + "/files", HttpMethod.POST)
+                .addFiles("files", element.getNewFiles().stream()
+                        .map(TodoFile::getFile)
+                        .collect(Collectors.toList()));
+        makeTokenRequest(request);
+        return response;
+    }
+
     public static Set<TodoElement> getTodo() throws IOException {
         Set<TodoElement> elements = new HashSet<>();
         MultiPartRequest.Response response = makeTokenRequest(Environment.TODO, HttpMethod.GET, new Json());
@@ -55,13 +69,12 @@ public class AdolfServer {
         }
         return elements;
     }
-//
-//    public static void saveFile(int todoId, TodoFile file, String folder) throws IOException {
-//        MultiPartRequest.Response response = makeTokenRequest(Environment.getTodoFileUrl(todoId, file.getId()),
-//                HttpMethod.GET, new Json());
-//        System.out.println(response.getResponseCode());
-//        response.saveFile(folder + "/" + file.getName());
-//    }
+
+    public static void saveFile(int todoId, TodoFile file, String folder) throws IOException {
+        MultiPartRequest.Response response = makeTokenRequest(Environment.getTodoFileUrl(todoId, file.getName()),
+                HttpMethod.GET, new Json());
+        response.saveFile(folder + "/" + file.getName());
+    }
 
     public static void makeLogoutRequest() throws IOException {
         makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());
