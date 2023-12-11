@@ -2,6 +2,7 @@ package net.mlk.adolffront.http;
 
 import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
+import net.mlk.adolffront.screens.finances.Finance;
 import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.adolffront.screens.todo.TodoFile;
 import net.mlk.jmson.Json;
@@ -76,8 +77,12 @@ public class AdolfServer {
         response.saveFile(folder + "/" + file.getName());
     }
 
-    public static MultiPartRequest.Response getFinance() throws IOException {
-        return makeTokenRequest(Environment.FINANCE, HttpMethod.GET, new Json());
+    public static Finance getFinance() throws IOException {
+        MultiPartRequest.Response response = makeTokenRequest(Environment.FINANCE, HttpMethod.GET, new Json());
+        if (response.getResponseCode() == 404) {
+            return null;
+        }
+        return JsonConverter.convertToObject(new Json(response.getResponse()), Finance.class);
     }
 
     public static void makeLogoutRequest() throws IOException {

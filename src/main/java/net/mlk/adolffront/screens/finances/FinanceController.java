@@ -2,8 +2,11 @@ package net.mlk.adolffront.screens.finances;
 
 import net.mlk.adolffront.http.AdolfServer;
 import net.mlk.adolffront.http.MultiPartRequest;
+import net.mlk.jmson.Json;
+import net.mlk.jmson.utils.JsonConverter;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class FinanceController {
     private final FinanceScreen screen;
@@ -12,12 +15,18 @@ public class FinanceController {
         this.screen = screen;
     }
 
-    public void getFinance() {
+    public Finance getFinance() {
         try {
-            MultiPartRequest.Response response = AdolfServer.getFinance();
+            return AdolfServer.getFinance();
         } catch (IOException ex) {
-
+            this.screen.setErrorText("Ошибка сети.");
+            return null;
         }
+    }
+
+    public Finance createFinance(double salary, LocalDate salaryDate, double remain) {
+        Finance finance = new Finance(salary, remain, salaryDate);
+        return finance;
     }
 
 }

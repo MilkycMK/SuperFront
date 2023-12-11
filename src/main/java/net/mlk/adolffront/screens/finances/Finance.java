@@ -17,6 +17,16 @@ public class Finance implements JsonConvertible {
     @JsonField(key = "salary_date", dateFormat = "yyyy-MM-dd")
     private LocalDate salaryDate;
 
+    public Finance() {
+
+    }
+
+    public Finance(double salary, double remain, LocalDate salaryDate) {
+        this.salary = salary;
+        this.remain = remain;
+        this.salaryDate = salaryDate;
+    }
+
     public int getId() {
         return this.id;
     }

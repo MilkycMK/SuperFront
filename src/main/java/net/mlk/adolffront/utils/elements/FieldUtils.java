@@ -1,5 +1,7 @@
 package net.mlk.adolffront.utils.elements;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -50,6 +52,15 @@ public class FieldUtils {
         field.textProperty().addListener((observableValue, string, t1) -> {
             if (field.getText().length() > max) {
                 field.setText(string);
+            }
+        });
+        return field;
+    }
+
+    public static TextInputControl applyOnlyIntegersFilter(TextInputControl field) {
+        field.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                field.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
         return field;

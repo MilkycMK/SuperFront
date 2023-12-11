@@ -13,8 +13,7 @@ public abstract class AbstractMenuElement extends BorderPane {
 
     public AbstractMenuElement(String name) {
         this.errorText.setTextAlignment(TextAlignment.CENTER);
-        this.errorText.translateXProperty().bind(super.widthProperty().multiply(0.5));
-        this.errorText.translateYProperty().bind(super.heightProperty());
+        this.errorText.translateYProperty().bind(super.heightProperty().multiply(0.99));
         super.getChildren().add(this.errorText);
         this.name = name;
     }
