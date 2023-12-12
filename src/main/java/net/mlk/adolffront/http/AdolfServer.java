@@ -109,7 +109,6 @@ public class AdolfServer {
     public static int createGroup(Group group) throws IOException {
         Json json = JsonConverter.convertToJson(group);
         MultiPartRequest.Response response = makeTokenRequest(Environment.GROUPS, HttpMethod.POST, json);
-        System.out.println(json);
         if (response.getResponseCode() == 409) {
             return -1;
         }

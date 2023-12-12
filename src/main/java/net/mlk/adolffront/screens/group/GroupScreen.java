@@ -35,6 +35,7 @@ public class GroupScreen extends AbstractMenuElement {
     public GroupScreen() {
         super("Группы");
         this.controller = new GroupController(this);
+        this.groupScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         super.getErrorText().translateXProperty().bind(super.widthProperty().multiply(0.5));
     }
 
@@ -110,6 +111,7 @@ public class GroupScreen extends AbstractMenuElement {
             if (this.currentElement == null || this.currentElement.getId() != -1) {
                 if (groupName.getText() == null) {
                     super.setErrorText("Имя группы не может быть пустым");
+                    return;
                 }
                 Group group = new Group(groupName.getText());
                 if (this.controller.createGroup(group)) {
@@ -135,9 +137,9 @@ public class GroupScreen extends AbstractMenuElement {
         VBox vBox = new VBox();
         vBox.setCursor(Cursor.HAND);
         vBox.minHeightProperty().bind(this.groupScroll.heightProperty().multiply(0.1));
-        vBox.minWidthProperty().bind(this.groupScroll.widthProperty().multiply(0.93));
+        vBox.minWidthProperty().bind(this.groupScroll.widthProperty());
         vBox.setPadding(new Insets(20));
-        Text name = TextUtils.createText(group.getName(), FontUtils.createFont(FontWeight.BOLD, 15));
+        Text name = TextUtils.createText(TextUtils.truncateString(group.getName(), 16), FontUtils.createFont(FontWeight.BOLD, 15));
         vBox.getChildren().add(name);
 
         if (current) {

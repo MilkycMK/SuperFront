@@ -21,4 +21,15 @@ public class TextUtils {
         return text;
     }
 
+    public static String truncateString(String string, int size) {
+        if (string == null || string.length() <= size) {
+            return string;
+        } else {
+            int halfSize = (size) / 2;
+            String leftHalf = string.substring(0, halfSize);
+            String rightHalf = string.substring(string.length() - halfSize);
+            return leftHalf + "..." + rightHalf;
+        }
+    }
+
 }

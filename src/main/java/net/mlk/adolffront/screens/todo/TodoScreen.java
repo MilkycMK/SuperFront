@@ -53,6 +53,7 @@ public class TodoScreen extends AbstractMenuElement {
         this.drawLeftMenu();
         this.drawTodoList();
         this.leftPanel.getChildren().add(this.todoScroll);
+        this.todoScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     }
 
     public void drawLeftMenu() {
@@ -111,7 +112,7 @@ public class TodoScreen extends AbstractMenuElement {
             super.setCenter(todoBox);
             return;
         }
-        TextArea topic = FieldUtils.createTextArea(element.getTopic(), "Заголовок", topicFont, Color.TRANSPARENT);
+        TextArea topic = FieldUtils.createTextArea(TextUtils.truncateString(element.getTopic(), 16), "Заголовок", topicFont, Color.TRANSPARENT);
         topic.setWrapText(true);
         FieldUtils.setMaxTextLength(topic, 128);
         topic.prefWidthProperty().bind(super.widthProperty().multiply(0.8));
@@ -206,7 +207,7 @@ public class TodoScreen extends AbstractMenuElement {
         part.setAlignment(Pos.TOP_CENTER);
         Text deleteFile = TextUtils.createText("-", FontUtils.createFont(25), Color.RED);
         deleteFile.setCursor(Cursor.HAND);
-        Text name = TextUtils.createText(truncateString(file.getName(), 9), FontUtils.createFont());
+        Text name = TextUtils.createText(TextUtils.truncateString(file.getName(), 9), FontUtils.createFont());
         part.getChildren().addAll(name, deleteFile);
         HBox.setMargin(deleteFile, new Insets(-10, 0, 0, 0));
         filesPane.getChildren().add(part);
@@ -237,7 +238,7 @@ public class TodoScreen extends AbstractMenuElement {
         VBox vBox = new VBox();
         vBox.setCursor(Cursor.HAND);
         vBox.minHeightProperty().bind(this.todoScroll.heightProperty().multiply(0.2));
-        vBox.minWidthProperty().bind(this.todoScroll.widthProperty().multiply(0.99));
+        vBox.minWidthProperty().bind(this.todoScroll.widthProperty());
         vBox.setPadding(new Insets(20));
         Text name = TextUtils.createText(element.getTopic(), FontUtils.createFont(FontWeight.BOLD, 15));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimePicker.DefaultFormat);
@@ -267,17 +268,6 @@ public class TodoScreen extends AbstractMenuElement {
     public void openTodo(TodoElement element) {
         this.currentElement = element;
         this.drawTodoElement(element);
-    }
-
-    public static String truncateString(String string, int size) {
-        if (string.length() <= size) {
-            return string;
-        } else {
-            int halfSize = (size) / 2;
-            String leftHalf = string.substring(0, halfSize);
-            String rightHalf = string.substring(string.length() - halfSize);
-            return leftHalf + "..." + rightHalf;
-        }
     }
 
     public void updateTodos() {
