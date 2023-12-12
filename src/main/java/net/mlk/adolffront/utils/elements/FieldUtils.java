@@ -58,9 +58,9 @@ public class FieldUtils {
     }
 
     public static TextInputControl applyOnlyIntegersFilter(TextInputControl field) {
-        field.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+        field.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                field.setText(newValue.replaceAll("[^\\d]", ""));
+                field.setText(newValue.replaceAll("\\D", ""));
             }
         });
         return field;

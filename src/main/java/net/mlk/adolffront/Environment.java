@@ -58,6 +58,7 @@ public abstract class Environment {
     }
 
     public static final String FINANCE = URL + "/finances";
+    public static final String TRANSACTIONS = FINANCE + "/transactions";
 
 
 }

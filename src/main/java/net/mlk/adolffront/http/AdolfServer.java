@@ -3,6 +3,7 @@ package net.mlk.adolffront.http;
 import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.screens.finances.Finance;
+import net.mlk.adolffront.screens.finances.Transaction;
 import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.adolffront.screens.todo.TodoFile;
 import net.mlk.jmson.Json;
@@ -109,6 +110,11 @@ public class AdolfServer {
             return null;
         }
         return response;
+    }
+
+    public static MultiPartRequest.Response makeTransaction(Transaction transaction) throws IOException {
+        Json json = JsonConverter.convertToJson(transaction);
+        return makeTokenRequest(Environment.TRANSACTIONS, HttpMethod.POST, json);
     }
 
     public static MultiPartRequest.Response makeRequest(String url, HttpMethod method, Json json) throws IOException {

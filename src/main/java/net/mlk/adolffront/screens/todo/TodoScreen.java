@@ -45,6 +45,7 @@ public class TodoScreen extends AbstractMenuElement {
     public TodoScreen() {
         super("Тудушки");
         this.controller = new TodoController(this);
+        super.getErrorText().translateXProperty().bind(super.widthProperty().multiply(0.5));
     }
 
     @Override
@@ -52,7 +53,6 @@ public class TodoScreen extends AbstractMenuElement {
         if (this.todoElements.isEmpty()) {
             this.updateTodos();
         }
-        super.getErrorText().translateXProperty().bind(super.widthProperty().multiply(0.5));
         this.drawLeftMenu();
         this.drawTodoList();
         this.leftPanel.getChildren().add(this.todoScroll);

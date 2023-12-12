@@ -27,6 +27,10 @@ public class Finance implements JsonConvertible {
         this.salaryDate = salaryDate;
     }
 
+    public void setRemain(double remain) {
+        this.remain = remain;
+    }
+
     public int getId() {
         return this.id;
     }

@@ -1,12 +1,16 @@
 package net.mlk.adolffront.screens.finances;
 
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -28,6 +32,7 @@ public class FinanceScreen extends AbstractMenuElement {
     public FinanceScreen() {
         super("Финансики");
         this.controller = new FinanceController(this);
+        super.getErrorText().translateXProperty().bind(super.widthProperty().multiply(0.5));
     }
 
     @Override
@@ -48,14 +53,40 @@ public class FinanceScreen extends AbstractMenuElement {
         this.infoPanel.setBackground(Environment.CORNER_BACKGROUND);
         this.infoPanel.prefWidthProperty().bind(super.widthProperty().divide(3));
         this.infoPanel.setPadding(new Insets(20));
+        this.infoPanel.spacingProperty().bind(super.heightProperty().multiply(0.1));
         Font font = FontUtils.createFont();
 
         Text text = TextUtils.createText("Баланс: " + this.finance.getRemain(), FontUtils.createFont(FontWeight.BOLD, 20));
 
+        VBox actions = new VBox();
+        actions.setAlignment(Pos.CENTER);
+        actions.spacingProperty().bind(super.heightProperty().multiply(0.1));
+        VBox addBalance = new VBox();
+        addBalance.setAlignment(Pos.CENTER);
+        addBalance.setSpacing(10);
+        TextField value = FieldUtils.createTextField(null, "Сумма", font);
+        TextField description = FieldUtils.createTextField(null, "Комментарий", font);
+        Button addButton = ButtonUtils.createButton("Пополнить", font);
+        Button removeButton = ButtonUtils.createButton("Снять", font);
+        addButton.minWidthProperty().bind(this.infoPanel.widthProperty().multiply(0.8));
+        removeButton.minWidthProperty().bind(this.infoPanel.widthProperty().multiply(0.8));
+        addBalance.getChildren().addAll(value, description, addButton, removeButton);
+        FieldUtils.applyOnlyIntegersFilter(value);
+        addButton.setOnMouseClicked((e) -> this.controller.makeTransaction(Transaction.Type.ADD,
+                value.getText(), description.getText()));
+        removeButton.setOnMouseClicked((e) -> this.controller.makeTransaction(Transaction.Type.SPEND,
+                value.getText(), description.getText()));
 
-        this.infoPanel.getChildren().add(text);
+        Button deleteAccount = ButtonUtils.createButton("Удалить учет", font);
+        deleteAccount.minWidthProperty().bind(this.infoPanel.widthProperty().multiply(0.8));
 
+        actions.getChildren().addAll(addBalance, deleteAccount);
+        this.infoPanel.getChildren().addAll(text, actions);
         super.setLeft(this.infoPanel);
+    }
+
+    public Finance getFinance() {
+        return this.finance;
     }
 
     public void drawFinanceRegisterScreen() {
@@ -96,6 +127,7 @@ public class FinanceScreen extends AbstractMenuElement {
             double r = remain.getText() == null ? 0 : Double.parseDouble(remain.getText());
             this.finance = this.controller.createFinance(s, sd, r);
             if (this.finance != null) {
+                this.setCenter(null);
                 this.drawMainScreen();
             }
         });

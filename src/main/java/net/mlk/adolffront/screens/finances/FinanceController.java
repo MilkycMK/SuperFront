@@ -32,4 +32,24 @@ public class FinanceController {
         return finance;
     }
 
+    public void makeTransaction(Transaction.Type type, String value, String description) {
+        if (value == null) {
+            this.screen.setErrorText("Сумма не может быть нулевой.");
+            return;
+        }
+        double sum = Double.parseDouble(value);
+        try {
+            Finance finance = this.screen.getFinance();
+            if (type == Transaction.Type.ADD) {
+                finance.setRemain(finance.getRemain() + sum);
+            } else {
+                finance.setRemain(finance.getRemain() - sum);
+            }
+            Transaction transaction = new Transaction(finance, type, sum, description);
+            AdolfServer.makeTransaction(transaction);
+        } catch (IOException ex) {
+            this.screen.setErrorText("Ошибка сети.");
+        }
+    }
+
 }

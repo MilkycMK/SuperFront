@@ -24,6 +24,20 @@ public class Transaction implements JsonConvertible {
     @JsonField(key = "salary_date", dateFormat = "yyyy-MM-dd")
     private LocalDate salaryDate;
 
+    public Transaction() {
+
+    }
+
+    public Transaction(Finance finance, Type type, double value, String description) {
+        this.type = type.toString();
+        this.salary = finance.getSalary();
+        this.value = value;
+        this.remain = finance.getRemain();
+        this.description = description;
+        this.creationDate = LocalDate.now();
+        this.salaryDate = finance.getSalaryDate();
+    }
+
     public int getId() {
         return this.id;
     }
