@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -21,8 +22,11 @@ import net.mlk.adolffront.utils.elements.ButtonUtils;
 import net.mlk.adolffront.utils.elements.FieldUtils;
 import net.mlk.adolffront.utils.elements.FontUtils;
 import net.mlk.adolffront.utils.elements.TextUtils;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,11 +86,10 @@ public class GroupScreen extends AbstractMenuElement {
             });
             hBox.prefWidthProperty().bind(this.lessonList.widthProperty());
             hBox.prefHeightProperty().bind(this.lessonList.heightProperty().multiply(0.1));
+
             Text name = TextUtils.createText(TextUtils.truncateString(lesson.getName(), 30) + " -:- " +
                     lesson.getPassedHours() + "/" + lesson.getHours() + " часов", font);
-            hBox.setOnMouseClicked((e) -> {
-                this.drawLesson(group, lesson);
-            });
+            hBox.setOnMouseClicked((e) -> this.drawLesson(group, lesson));
             hBox.getChildren().addAll(name);
             lessonBox.getChildren().add(hBox);
         }
@@ -119,21 +122,19 @@ public class GroupScreen extends AbstractMenuElement {
         VBox lessonBox = new VBox();
         this.lessonList.setContent(lessonBox);
 
-//        Set<Lesson> lessons = this.controller.getLessonHistory(group.getId());
-//        for (Lesson lesson : lessons) {
-//            HBox hBox = new HBox();
-//            hBox.setPadding(new Insets(10));
-//            hBox.setCursor(Cursor.HAND);
-//            hBox.hoverProperty().addListener((obs, oldValue, newValue) -> {
-//                hBox.setBackground(newValue ? Environment.BACKGROUND : Environment.TRANSPARENT_BACKGROUND);
-//            });
-//            hBox.prefWidthProperty().bind(this.lessonList.widthProperty());
-//            hBox.prefHeightProperty().bind(this.lessonList.heightProperty().multiply(0.1));
-//            Text name = TextUtils.createText(TextUtils.truncateString(lesson.getName(), 30) + " -:- " +
-//                    lesson.getPassedHours() + "/" + lesson.getHours() + " часов", font);
-//            hBox.getChildren().addAll(name);
-//            lessonBox.getChildren().add(hBox);
-//        }
+        Set<LessonHistory> lessons = this.controller.getLessonHistory(group.getId(), lesson.getId());
+        for (LessonHistory history : lessons) {
+            HBox hBox = new HBox();
+            hBox.setPadding(new Insets(10));
+            hBox.prefWidthProperty().bind(this.lessonList.widthProperty());
+            hBox.prefHeightProperty().bind(this.lessonList.heightProperty().multiply(0.1));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Text text = TextUtils.createText(TextUtils.truncateString(history.getTopic() == null ? "" :
+                    history.getTopic() + ", ", 30) + "Дата: " + formatter.format(history.getDate()) + ", Часы: " +
+                    history.getNumber() * 2 + "/" + lesson.getHours());
+            hBox.getChildren().addAll(text);
+            lessonBox.getChildren().add(hBox);
+        }
 
         gr.getChildren().addAll(control, this.lessonList);
         super.setCenter(gr);

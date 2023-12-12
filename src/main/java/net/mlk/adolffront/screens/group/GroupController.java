@@ -37,4 +37,13 @@ public class GroupController {
         }
     }
 
+    public Set<LessonHistory> getLessonHistory(int id, int lId) {
+        try {
+            return id == -1 ? new HashSet<>() : AdolfServer.getLessonHistory(id, lId);
+        } catch (IOException ex) {
+            this.screen.setErrorText("Ошибка сети.");
+            return new HashSet<>();
+        }
+    }
+
 }

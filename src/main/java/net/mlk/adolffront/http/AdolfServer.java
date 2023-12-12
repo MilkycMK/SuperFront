@@ -6,6 +6,7 @@ import net.mlk.adolffront.screens.finances.Finance;
 import net.mlk.adolffront.screens.finances.Transaction;
 import net.mlk.adolffront.screens.group.Group;
 import net.mlk.adolffront.screens.group.Lesson;
+import net.mlk.adolffront.screens.group.LessonHistory;
 import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.adolffront.screens.todo.TodoFile;
 import net.mlk.jmson.Json;
@@ -113,6 +114,16 @@ public class AdolfServer {
         JsonList list = new JsonList(response.getResponse());
         for (Json json : list.getListWithJsons()) {
             elements.add(JsonConverter.convertToObject(json, Lesson.class));
+        }
+        return elements;
+    }
+
+    public static Set<LessonHistory> getLessonHistory(int id, int lId) throws IOException {
+        Set<LessonHistory> elements = new HashSet<>();
+        MultiPartRequest.Response response = makeTokenRequest(Environment.getLessonHistoryUrl(id, lId), HttpMethod.GET, new Json());
+        JsonList list = new JsonList(response.getResponse());
+        for (Json json : list.getListWithJsons()) {
+            elements.add(JsonConverter.convertToObject(json, LessonHistory.class));
         }
         return elements;
     }
