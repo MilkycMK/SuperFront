@@ -6,11 +6,13 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.http.AdolfServer;
 import net.mlk.adolffront.screens.menu.AbstractMenuElement;
@@ -27,6 +29,7 @@ import java.util.Set;
 public class GroupScreen extends AbstractMenuElement {
     private final GroupController controller;
     private ScrollPane groupScroll = new ScrollPane();
+    private ScrollPane lessonList = new ScrollPane();
     private Set<Group> groups = new HashSet<>();
     private VBox currentBox;
     private Group currentElement;
@@ -50,7 +53,90 @@ public class GroupScreen extends AbstractMenuElement {
     }
 
     public void drawGroup(Group group) {
-        System.out.println(this.controller.getLessons(group.getId()));
+        Font font = FontUtils.createFont();
+        VBox gr = new VBox();
+        gr.setSpacing(20);
+        gr.setPadding(new Insets(20));
+        HBox control = new HBox();
+        control.setSpacing(20);
+        Button newLesson = ButtonUtils.createButton("Добавить пару", font);
+        Button refresh = ButtonUtils.createButton("Обновить список", font);
+        refresh.setOnMouseClicked((e) -> {
+            this.drawGroup(group);
+        });
+        control.getChildren().addAll(newLesson, refresh);
+
+        StyleUtils.setBackground(this.lessonList, Environment.PANELS_COLOR);
+        this.lessonList.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        this.lessonList.prefHeightProperty().bind(gr.heightProperty());
+        VBox lessonBox = new VBox();
+        this.lessonList.setContent(lessonBox);
+
+        Set<Lesson> lessons = this.controller.getLessons(group.getId());
+        for (Lesson lesson : lessons) {
+            HBox hBox = new HBox();
+            hBox.setPadding(new Insets(10));
+            hBox.setCursor(Cursor.HAND);
+            hBox.hoverProperty().addListener((obs, oldValue, newValue) -> {
+                hBox.setBackground(newValue ? Environment.BACKGROUND : Environment.TRANSPARENT_BACKGROUND);
+            });
+            hBox.prefWidthProperty().bind(this.lessonList.widthProperty());
+            hBox.prefHeightProperty().bind(this.lessonList.heightProperty().multiply(0.1));
+            Text name = TextUtils.createText(TextUtils.truncateString(lesson.getName(), 30) + " -:- " +
+                    lesson.getPassedHours() + "/" + lesson.getHours() + " часов", font);
+            hBox.setOnMouseClicked((e) -> {
+                this.drawLesson(group, lesson);
+            });
+            hBox.getChildren().addAll(name);
+            lessonBox.getChildren().add(hBox);
+        }
+
+        gr.getChildren().addAll(control, this.lessonList);
+        super.setCenter(gr);
+    }
+
+    public void drawLesson(Group group, Lesson lesson) {
+        Font font = FontUtils.createFont();
+        VBox gr = new VBox();
+        gr.setSpacing(20);
+        gr.setPadding(new Insets(20));
+        HBox control = new HBox();
+        control.setSpacing(20);
+        Button back = ButtonUtils.createButton("Назад", font);
+        back.setOnMouseClicked((e) -> {
+            this.drawGroup(group);
+        });
+        Button newLesson = ButtonUtils.createButton("Добавить пару", font);
+        Button refresh = ButtonUtils.createButton("Обновить список", font);
+        refresh.setOnMouseClicked((e) -> {
+            this.drawLesson(group, lesson);
+        });
+        control.getChildren().addAll(back, newLesson, refresh);
+
+        StyleUtils.setBackground(this.lessonList, Environment.PANELS_COLOR);
+        this.lessonList.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        this.lessonList.prefHeightProperty().bind(gr.heightProperty());
+        VBox lessonBox = new VBox();
+        this.lessonList.setContent(lessonBox);
+
+//        Set<Lesson> lessons = this.controller.getLessonHistory(group.getId());
+//        for (Lesson lesson : lessons) {
+//            HBox hBox = new HBox();
+//            hBox.setPadding(new Insets(10));
+//            hBox.setCursor(Cursor.HAND);
+//            hBox.hoverProperty().addListener((obs, oldValue, newValue) -> {
+//                hBox.setBackground(newValue ? Environment.BACKGROUND : Environment.TRANSPARENT_BACKGROUND);
+//            });
+//            hBox.prefWidthProperty().bind(this.lessonList.widthProperty());
+//            hBox.prefHeightProperty().bind(this.lessonList.heightProperty().multiply(0.1));
+//            Text name = TextUtils.createText(TextUtils.truncateString(lesson.getName(), 30) + " -:- " +
+//                    lesson.getPassedHours() + "/" + lesson.getHours() + " часов", font);
+//            hBox.getChildren().addAll(name);
+//            lessonBox.getChildren().add(hBox);
+//        }
+
+        gr.getChildren().addAll(control, this.lessonList);
+        super.setCenter(gr);
     }
 
     public void drawLeftMenu() {
