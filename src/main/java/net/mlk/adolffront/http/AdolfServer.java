@@ -4,6 +4,7 @@ import net.mlk.adolffront.AdolfFront;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.screens.finances.Finance;
 import net.mlk.adolffront.screens.finances.Transaction;
+import net.mlk.adolffront.screens.group.Group;
 import net.mlk.adolffront.screens.todo.TodoElement;
 import net.mlk.adolffront.screens.todo.TodoFile;
 import net.mlk.jmson.Json;
@@ -93,6 +94,26 @@ public class AdolfServer {
 
     public static MultiPartRequest.Response deleteFinance() throws IOException {
         return makeTokenRequest(Environment.FINANCE, HttpMethod.DELETE, new Json());
+    }
+
+    public static Set<Group> getGroups() throws IOException {
+        Set<Group> elements = new HashSet<>();
+        MultiPartRequest.Response response = makeTokenRequest(Environment.GROUPS, HttpMethod.GET, new Json());
+        JsonList list = new JsonList(response.getResponse());
+        for (Json json : list.getListWithJsons()) {
+            elements.add(JsonConverter.convertToObject(json, Group.class));
+        }
+        return elements;
+    }
+
+    public static int createGroup(Group group) throws IOException {
+        Json json = JsonConverter.convertToJson(group);
+        MultiPartRequest.Response response = makeTokenRequest(Environment.GROUPS, HttpMethod.POST, json);
+        System.out.println(json);
+        if (response.getResponseCode() == 409) {
+            return -1;
+        }
+        return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[2]);
     }
 
     public static void makeLogoutRequest() throws IOException {

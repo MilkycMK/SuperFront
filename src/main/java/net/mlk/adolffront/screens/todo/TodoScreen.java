@@ -32,9 +32,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TodoScreen extends AbstractMenuElement {
-    private static final Background TODO_ACTIVE =
-            new Background(new BackgroundFill(Environment.PANELS_COLOR,
-                    CornerRadii.EMPTY,  Insets.EMPTY));
     private Set<TodoElement> todoElements = new HashSet<>();
     private TodoElement currentElement;
     private final TodoController controller;
@@ -253,14 +250,14 @@ public class TodoScreen extends AbstractMenuElement {
                 this.currentBox.setBackground(Environment.BACKGROUND);
             }
             this.currentBox = vBox;
-            this.currentBox.setBackground(TODO_ACTIVE);
+            this.currentBox.setBackground(Environment.TODO_ACTIVE);
         }
         vBox.setOnMouseClicked((e) -> {
             if (this.currentBox != null) {
                 this.currentBox.setBackground(Environment.BACKGROUND);
             }
             this.currentBox = vBox;
-            this.currentBox.setBackground(TODO_ACTIVE);
+            this.currentBox.setBackground(Environment.TODO_ACTIVE);
             this.openTodo(element);
         });
 

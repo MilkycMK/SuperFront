@@ -31,6 +31,9 @@ public abstract class Environment {
     public static final Background CORNER_BACKGROUND =
             new Background(new BackgroundFill(Environment.PANELS_COLOR,
                     new CornerRadii(0, Environment.ROUND, 0, 0, false), Insets.EMPTY));
+    public static final Background TODO_ACTIVE =
+            new Background(new BackgroundFill(Environment.PANELS_COLOR,
+                    CornerRadii.EMPTY,  Insets.EMPTY));
 
     public static final Background MENU_BACKGROUND =
             new Background(new BackgroundFill(PANELS_COLOR, CornerRadii.EMPTY, new Insets(0, 0, 10, 0)));
@@ -59,6 +62,8 @@ public abstract class Environment {
 
     public static final String FINANCE = URL + "/finances";
     public static final String TRANSACTIONS = FINANCE + "/transactions";
+
+    public static final String GROUPS = URL + "/groups";
 
 
 }
