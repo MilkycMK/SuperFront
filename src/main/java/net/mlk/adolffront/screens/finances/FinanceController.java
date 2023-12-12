@@ -32,6 +32,14 @@ public class FinanceController {
         return finance;
     }
 
+    public void deleteFinance() {
+        try {
+            AdolfServer.deleteFinance();
+        } catch (IOException ex) {
+            this.screen.setErrorText("Ошибка сети.");
+        }
+    }
+
     public void makeTransaction(Transaction.Type type, String value, String description) {
         if (value == null) {
             this.screen.setErrorText("Сумма не может быть нулевой.");

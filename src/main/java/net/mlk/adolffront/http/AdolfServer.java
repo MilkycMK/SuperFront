@@ -91,6 +91,10 @@ public class AdolfServer {
         return makeTokenRequest(Environment.FINANCE, HttpMethod.POST, json);
     }
 
+    public static MultiPartRequest.Response deleteFinance() throws IOException {
+        return makeTokenRequest(Environment.FINANCE, HttpMethod.DELETE, new Json());
+    }
+
     public static void makeLogoutRequest() throws IOException {
         makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());
     }

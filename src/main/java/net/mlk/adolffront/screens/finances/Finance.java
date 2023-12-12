@@ -25,6 +25,10 @@ public class Finance implements JsonConvertible {
         this.salary = salary;
         this.remain = remain;
         this.salaryDate = salaryDate;
+        LocalDate today = LocalDate.now();
+        if (today.isAfter(this.salaryDate) || this.salaryDate.isEqual(today)) {
+            this.remain += salary;
+        }
     }
 
     public void setRemain(double remain) {

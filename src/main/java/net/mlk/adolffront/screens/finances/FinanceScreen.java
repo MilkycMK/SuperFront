@@ -72,13 +72,24 @@ public class FinanceScreen extends AbstractMenuElement {
         removeButton.minWidthProperty().bind(this.infoPanel.widthProperty().multiply(0.8));
         addBalance.getChildren().addAll(value, description, addButton, removeButton);
         FieldUtils.applyOnlyIntegersFilter(value);
-        addButton.setOnMouseClicked((e) -> this.controller.makeTransaction(Transaction.Type.ADD,
-                value.getText(), description.getText()));
-        removeButton.setOnMouseClicked((e) -> this.controller.makeTransaction(Transaction.Type.SPEND,
-                value.getText(), description.getText()));
+        addButton.setOnMouseClicked((e) -> {
+            this.controller.makeTransaction(Transaction.Type.ADD,
+                    value.getText(), description.getText());
+            this.drawMainScreen();
+        });
+        removeButton.setOnMouseClicked((e) -> {
+            this.controller.makeTransaction(Transaction.Type.SPEND,
+                    value.getText(), description.getText());
+            this.drawMainScreen();
+        });
 
         Button deleteAccount = ButtonUtils.createButton("Удалить учет", font);
         deleteAccount.minWidthProperty().bind(this.infoPanel.widthProperty().multiply(0.8));
+        deleteAccount.setOnMouseClicked((e) -> {
+            this.controller.deleteFinance();
+            this.setLeft(null);
+            this.drawFinanceRegisterScreen();
+        });
 
         actions.getChildren().addAll(addBalance, deleteAccount);
         this.infoPanel.getChildren().addAll(text, actions);
