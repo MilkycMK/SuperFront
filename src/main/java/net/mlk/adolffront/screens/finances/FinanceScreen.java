@@ -1,5 +1,6 @@
 package net.mlk.adolffront.screens.finances;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -7,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import net.mlk.adolffront.Environment;
 import net.mlk.adolffront.screens.menu.AbstractMenuElement;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 
 public class FinanceScreen extends AbstractMenuElement {
     private final FinanceController controller;
+    private VBox infoPanel;
     private Finance finance;
 
     public FinanceScreen() {
@@ -31,7 +34,28 @@ public class FinanceScreen extends AbstractMenuElement {
     public void drawScreen() {
         if ((this.finance = this.controller.getFinance()) == null) {
             this.drawFinanceRegisterScreen();
+            return;
         }
+        this.drawMainScreen();
+    }
+
+    public void drawMainScreen() {
+        this.drawInfoPanel();
+    }
+
+    public void drawInfoPanel() {
+        this.infoPanel = new VBox();
+        this.infoPanel.setBackground(Environment.CORNER_BACKGROUND);
+        this.infoPanel.prefWidthProperty().bind(super.widthProperty().divide(3));
+        this.infoPanel.setPadding(new Insets(20));
+        Font font = FontUtils.createFont();
+
+        Text text = TextUtils.createText("Баланс: " + this.finance.getRemain(), FontUtils.createFont(FontWeight.BOLD, 20));
+
+
+        this.infoPanel.getChildren().add(text);
+
+        super.setLeft(this.infoPanel);
     }
 
     public void drawFinanceRegisterScreen() {
@@ -51,7 +75,7 @@ public class FinanceScreen extends AbstractMenuElement {
         salary.maxWidthProperty().bind(registerScreen.widthProperty().multiply(0.3));
         DatePicker salaryDate = new DatePicker();
         StyleUtils.setBackground(salaryDate, Environment.BACKGROUND_COLOR);
-        salaryDate.maxWidthProperty().bind(registerScreen.widthProperty().multiply(0.3));
+        salaryDate.maxWidthProperty().bind(registerScreen.widthProperty().multiply(0.4));
         hBox.getChildren().addAll(salary, salaryDate);
 
         TextField remain = FieldUtils.createTextField(null, "Остаток", font);
@@ -71,6 +95,9 @@ public class FinanceScreen extends AbstractMenuElement {
             LocalDate sd = salaryDate.getValue();
             double r = remain.getText() == null ? 0 : Double.parseDouble(remain.getText());
             this.finance = this.controller.createFinance(s, sd, r);
+            if (this.finance != null) {
+                this.drawMainScreen();
+            }
         });
         registerScreen.getChildren().addAll(text, hBox, remain, submit);
         super.setCenter(registerScreen);

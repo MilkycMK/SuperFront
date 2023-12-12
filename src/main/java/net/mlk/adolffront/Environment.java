@@ -28,6 +28,9 @@ public abstract class Environment {
             new Background(new BackgroundFill(PANELS_COLOR, new CornerRadii(ROUND), Insets.EMPTY));
     public static final Background BACKGROUND =
             new Background(new BackgroundFill(BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY));
+    public static final Background CORNER_BACKGROUND =
+            new Background(new BackgroundFill(Environment.PANELS_COLOR,
+                    new CornerRadii(0, Environment.ROUND, 0, 0, false), Insets.EMPTY));
 
     public static final Background MENU_BACKGROUND =
             new Background(new BackgroundFill(PANELS_COLOR, CornerRadii.EMPTY, new Insets(0, 0, 10, 0)));

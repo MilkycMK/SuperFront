@@ -85,6 +85,11 @@ public class AdolfServer {
         return JsonConverter.convertToObject(new Json(response.getResponse()), Finance.class);
     }
 
+    public static MultiPartRequest.Response createFinance(Finance finance) throws IOException {
+        Json json = JsonConverter.convertToJson(finance);
+        return makeTokenRequest(Environment.FINANCE, HttpMethod.POST, json);
+    }
+
     public static void makeLogoutRequest() throws IOException {
         makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());
     }

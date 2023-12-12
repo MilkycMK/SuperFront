@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import net.mlk.adolffront.AdolfFront;
@@ -33,9 +32,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TodoScreen extends AbstractMenuElement {
-    private static final Background TODO_LIST_BACKGROUND =
-            new Background(new BackgroundFill(Environment.PANELS_COLOR,
-                    new CornerRadii(0, Environment.ROUND, 0, 0, false), Insets.EMPTY));
     private static final Background TODO_ACTIVE =
             new Background(new BackgroundFill(Environment.PANELS_COLOR,
                     CornerRadii.EMPTY,  Insets.EMPTY));
@@ -64,7 +60,7 @@ public class TodoScreen extends AbstractMenuElement {
 
     public void drawLeftMenu() {
         this.leftPanel = new VBox();
-        this.leftPanel.setBackground(TODO_LIST_BACKGROUND);
+        this.leftPanel.setBackground(Environment.CORNER_BACKGROUND);
         this.leftPanel.prefWidthProperty().bind(super.widthProperty().divide(3));
         Font font = FontUtils.createFont();
 
