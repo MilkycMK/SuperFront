@@ -46,6 +46,7 @@ public class FinanceScreen extends AbstractMenuElement {
 
     public void drawMainScreen() {
         this.drawInfoPanel();
+        this.drawHistoryPanel();
     }
 
     public void drawInfoPanel() {
@@ -94,6 +95,10 @@ public class FinanceScreen extends AbstractMenuElement {
         actions.getChildren().addAll(addBalance, deleteAccount);
         this.infoPanel.getChildren().addAll(text, actions);
         super.setLeft(this.infoPanel);
+    }
+
+    public void drawHistoryPanel() {
+        // TODO center transactions history
     }
 
     public Finance getFinance() {
