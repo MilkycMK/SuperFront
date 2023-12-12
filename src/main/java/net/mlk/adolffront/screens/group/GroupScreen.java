@@ -50,7 +50,7 @@ public class GroupScreen extends AbstractMenuElement {
     }
 
     public void drawGroup(Group group) {
-
+        System.out.println(this.controller.getLessons(group.getId()));
     }
 
     public void drawLeftMenu() {

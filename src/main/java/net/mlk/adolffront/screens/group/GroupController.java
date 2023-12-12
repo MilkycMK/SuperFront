@@ -3,6 +3,8 @@ package net.mlk.adolffront.screens.group;
 import net.mlk.adolffront.http.AdolfServer;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GroupController {
     private final GroupScreen screen;
@@ -24,6 +26,15 @@ public class GroupController {
             return false;
         }
         return true;
+    }
+
+    public Set<Lesson> getLessons(int id) {
+        try {
+            return id == -1 ? new HashSet<>() : AdolfServer.getLessons(id);
+        } catch (IOException ex) {
+            this.screen.setErrorText("Ошибка сети.");
+            return new HashSet<>();
+        }
     }
 
 }

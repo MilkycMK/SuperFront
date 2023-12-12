@@ -64,6 +64,11 @@ public abstract class Environment {
     public static final String TRANSACTIONS = FINANCE + "/transactions";
 
     public static final String GROUPS = URL + "/groups";
+    public static final String LESSONS = GROUPS + "/%s/lessons";
+
+    public static String getLessonsUrl(int id) {
+        return String.format(LESSONS, id);
+    }
 
 
 }
