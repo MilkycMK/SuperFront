@@ -42,7 +42,7 @@ public abstract class Environment {
     public static final Background TEXTFIELD_BACKGROUND =
             new Background(new BackgroundFill(BACKGROUND_COLOR, new CornerRadii(ROUND), Insets.EMPTY));
 
-    public static final String URL = "http://localhost:8443";
+    public static final String URL = "https://mamamia.mom:8443";
 
     public static final String LOGIN = URL + "/signin";
     public static final String REGISTER = URL + "/signup";
