@@ -6,17 +6,17 @@ group 'net.mlk.adolffront'
 
 repositories {
     mavenCentral()
-    flatDir {
-        dir 'libs/'
-    }
 }
 
 dependencies {
-    implementation 'libs:Jmson'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 jar {
     manifest {
         attributes 'Main-Class': 'net.mlk.adolffront.AdolfFront'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }

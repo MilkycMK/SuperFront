@@ -68,7 +68,7 @@ public abstract class Environment {
     public static final String LESSON_HISTORY = LESSONS + "/%s/history";
 
     public static String getGroupUrl(int id) {
-        return GROUPS + "/id";
+        return GROUPS + "/" + id;
     }
 
     public static String getLessonsUrl(int id) {

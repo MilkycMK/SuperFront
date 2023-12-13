@@ -162,7 +162,7 @@ public class AdolfServer {
     }
 
     public static MultiPartRequest.Response deleteGroup(int id) throws IOException {
-        return makeTokenRequest(Environment.getGroupUrl(id), HttpMethod.POST, new Json());
+        return makeTokenRequest(Environment.getGroupUrl(id), HttpMethod.DELETE, new Json());
     }
 
     public static MultiPartRequest.Response deleteLesson(int gId, int lId) throws IOException {

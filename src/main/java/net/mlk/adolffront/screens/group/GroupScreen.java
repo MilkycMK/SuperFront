@@ -404,7 +404,18 @@ public class GroupScreen extends AbstractMenuElement {
         vBox.minWidthProperty().bind(this.groupScroll.widthProperty());
         vBox.setPadding(new Insets(20));
         Text name = TextUtils.createText(TextUtils.truncateString(group.getName(), 16), FontUtils.createFont(FontWeight.BOLD, 15));
-        vBox.getChildren().add(name);
+        Text delete = TextUtils.createText("Удалить", FontUtils.createFont(), Color.RED);
+        delete.setOnMouseClicked((e) -> {
+            this.controller.deleteGroup(group);
+            this.updateGroups();
+            if (this.currentElement == group) {
+                this.openGroup(null);
+            }
+            this.drawGroupList();
+            e.consume();
+        });
+        vBox.getChildren().addAll(name, delete);
+
 
         if (current) {
             if (this.currentBox != null) {
@@ -427,6 +438,10 @@ public class GroupScreen extends AbstractMenuElement {
 
     public void openGroup(Group group) {
         this.currentElement = group;
+        if (group == null) {
+            this.setCenter(null);
+            return;
+        }
         this.drawGroup(group);
     }
 
