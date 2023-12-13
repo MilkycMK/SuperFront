@@ -36,6 +36,10 @@ public class AdolfServer {
         return makeRequest(Environment.REGISTER, HttpMethod.POST, json);
     }
 
+    public static void makeLogoutRequest() throws IOException {
+        makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());
+    }
+
     public static int postTodo(TodoElement todo) throws IOException {
         Json json = JsonConverter.convertToJson(todo);
         MultiPartRequest request = new MultiPartRequest(Environment.TODO, HttpMethod.POST)
@@ -120,7 +124,8 @@ public class AdolfServer {
 
     public static Set<LessonHistory> getLessonHistory(int id, int lId) throws IOException {
         Set<LessonHistory> elements = new HashSet<>();
-        MultiPartRequest.Response response = makeTokenRequest(Environment.getLessonHistoryUrl(id, lId), HttpMethod.GET, new Json());
+        MultiPartRequest.Response response = makeTokenRequest(Environment.getLessonsHistoryUrl(id, lId), HttpMethod.GET, new Json());
+
         JsonList list = new JsonList(response.getResponse());
         for (Json json : list.getListWithJsons()) {
             elements.add(JsonConverter.convertToObject(json, LessonHistory.class));
@@ -137,8 +142,35 @@ public class AdolfServer {
         return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[2]);
     }
 
-    public static void makeLogoutRequest() throws IOException {
-        makeTokenRequest(Environment.LOGOUT, HttpMethod.POST, new Json());
+    public static int createLesson(int groupId, Lesson lesson) throws IOException {
+        Json json = JsonConverter.convertToJson(lesson);
+        MultiPartRequest.Response response = makeTokenRequest(Environment.getLessonsUrl(groupId), HttpMethod.POST, json);
+        if (response.getResponseCode() == 409) {
+            return -1;
+        }
+
+        return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[4]);
+    }
+
+    public static int createLessonHistory(int groupId, int lessonId, LessonHistory history) throws IOException {
+        Json json = JsonConverter.convertToJson(history);
+        MultiPartRequest.Response response = makeTokenRequest(Environment.getLessonsHistoryUrl(groupId, lessonId), HttpMethod.POST, json);
+        if (response.getResponseCode() == 409) {
+            return -1;
+        }
+        return Integer.parseInt(response.getHeaders().get("Location").get(0).split("/")[6]);
+    }
+
+    public static MultiPartRequest.Response deleteGroup(int id) throws IOException {
+        return makeTokenRequest(Environment.getGroupUrl(id), HttpMethod.POST, new Json());
+    }
+
+    public static MultiPartRequest.Response deleteLesson(int gId, int lId) throws IOException {
+        return makeTokenRequest(Environment.getLessonUrl(gId, lId), HttpMethod.DELETE, new Json());
+    }
+
+    public static MultiPartRequest.Response deleteLessonHistory(int gId, int lId, int hId) throws IOException {
+        return makeTokenRequest(Environment.getLessonHistoryUrl(gId, lId, hId), HttpMethod.DELETE, new Json());
     }
 
     public static MultiPartRequest.Response makeTokenRequest(String url, HttpMethod method, Json json) throws IOException {

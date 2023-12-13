@@ -67,12 +67,24 @@ public abstract class Environment {
     public static final String LESSONS = GROUPS + "/%s/lessons";
     public static final String LESSON_HISTORY = LESSONS + "/%s/history";
 
+    public static String getGroupUrl(int id) {
+        return GROUPS + "/id";
+    }
+
     public static String getLessonsUrl(int id) {
         return String.format(LESSONS, id);
     }
 
-    public static String getLessonHistoryUrl(int id, int lId) {
+    public static String getLessonUrl(int id, int lId) {
+        return getLessonsUrl(id) + "/" + lId;
+    }
+
+    public static String getLessonsHistoryUrl(int id, int lId) {
         return String.format(LESSON_HISTORY, id, lId);
+    }
+
+    public static String getLessonHistoryUrl(int id, int lId, int hId) {
+        return String.format(LESSON_HISTORY + "/%s", id, lId, hId);
     }
 
 
