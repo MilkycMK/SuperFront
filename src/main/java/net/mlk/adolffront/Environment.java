@@ -5,7 +5,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public abstract class Environment {
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
@@ -86,6 +85,5 @@ public abstract class Environment {
     public static String getLessonHistoryUrl(int id, int lId, int hId) {
         return String.format(LESSON_HISTORY + "/%s", id, lId, hId);
     }
-
 
 }
